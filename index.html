@@ -1449,14 +1449,64 @@
   };
 
   window.exportAllToCSV = function() {
-    const valid = records.filter(r => r?.id);
-    if (!valid.length) { alert('出力する記録がありません'); return; }
-    const header = ['通し番号','樹木番号','樹種名','点検者','所在地','調査日','総合判定','必要な処置','緯度X','経度Y'];
-    const rows = valid.map((r, i) => [i+1, r.treeNo||'', r.species||'', r.inspector||'', r.location||'', r.surveyDate||'', r.overall||'', (r.measures||[]).join('、'), r.latitude||'', r.longitude||'']);
-    const csvContent = [header, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
-    dlBlob(new Blob(['\uFEFF' + csvContent], {type:'text/csv;charset=utf-8;'}), `樹木点検一覧_${new Date().toISOString().slice(0,10)}.csv`);
-    alert('CSVを出力しました');
+  const valid = records.filter(r => r?.id);
+  if (!valid.length) { alert('出力する記録がありません'); return; }
+  
+  // 活力度・健全度の文字列表現を取得するヘルパー
+  const getDeclineLevel = (avg) => {
+    if (avg === undefined || avg === null) return '';
+    if (avg < 0.8) return 'Ⅰ（良）';
+    if (avg < 1.6) return 'Ⅱ（やや不良）';
+    if (avg < 2.4) return 'Ⅲ（不良）';
+    if (avg < 3.2) return 'Ⅳ（著しく不良）';
+    return 'Ⅴ（枯死寸前）';
   };
+  
+  const getHealthWorst = (health) => {
+    if (!health || !Object.keys(health).length) return '';
+    const order = {A:0, B:1, C:2, D:3};
+    let worst = 'A';
+    Object.values(health).forEach(g => {
+      if (g && order[g] > (order[worst] || 0)) worst = g;
+    });
+    return worst;
+  };
+  
+  const header = [
+    '樹木No', '調査日', '天候', '調査者', '樹種名', '所在地',
+    '樹高(m)', '幹周(cm)', '緯度', '経度', '総合判定',
+    '活力度', '健全度', '腐朽菌', '所見', '必要な措置'
+  ];
+  
+  const rows = valid.map(r => [
+    r.treeNo || '',
+    r.surveyDate || '',
+    r.weather || '',
+    r.inspector || '',
+    r.species || '',
+    r.location || '',
+    r.treeHeight || '',
+    r.trunkGirth || '',
+    r.latitude || '',
+    r.longitude || '',
+    r.overall || '',
+    getDeclineLevel(r.avg),
+    getHealthWorst(r.health),
+    [...(r.fungus || []), r.fungusOther || ''].filter(Boolean).join('、'),
+    r.comment || '',
+    (r.measures || []).join('、')
+  ]);
+  
+  const csvContent = [header, ...rows]
+    .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    .join('\n');
+  
+  dlBlob(
+    new Blob(['\uFEFF' + csvContent], {type:'text/csv;charset=utf-8;'}),
+    `樹木点検一覧_${new Date().toISOString().slice(0,10)}.csv`
+  );
+  alert('✅ CSVを出力しました');
+};
 
   // ===== JSON統合 =====
   document.getElementById('jsonMergeInput').addEventListener('change', async function(e) {
