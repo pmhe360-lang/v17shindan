@@ -321,6 +321,14 @@
           <button class="btn-sec" onclick="exportAllToJSON()">📦 JSONバックアップ</button>
           <button class="btn-sec" onclick="exportSummaryToExcel()">📋 一覧表Excel出力</button>
           <button class="btn-sec" onclick="exportAllToCSV()">📄 CSV出力</button>
+           <button class="btn-sec" onclick="exportAllToCSV()">📄 CSV出力</button>
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <span style="font-size:0.78rem; color:#3949ab; font-weight:700;">📍 GPX出力:</span>
+            <button class="btn-sec" onclick="exportToGPX('all')" style="font-size:0.78rem; background:#e8f0fe; border-color:#3949ab; color:#1a237e;">全件</button>
+            <button class="btn-sec" onclick="exportToGPX('danger')" style="font-size:0.78rem; background:#ffebee; border-color:#c62828; color:#b71c1c;">判定Dのみ</button>
+            <button class="btn-sec" onclick="exportToGPX('filtered')" style="font-size:0.78rem; background:#e8f5e9; border-color:#2d5016; color:#2d5016;">表示中🔍</button>
+          </div>
+          <input type="file" id="jsonImportInput" accept=".json,application/json" style="display:none;">
           <input type="file" id="jsonImportInput" accept=".json,application/json" style="display:none;">
           <input type="file" id="jsonMergeInput" accept=".json,application/json" multiple style="display:none;">
           <button class="btn-sec" onclick="document.getElementById('jsonImportInput').click()">📂 JSON復元</button>
@@ -1507,6 +1515,101 @@
   );
   alert('✅ CSVを出力しました');
 };
+
+
+  // ===== GPX出力（全件・判定Dのみ・表示中） =====
+  window.exportToGPX = function(mode) {
+    const valid = records.filter(r => r?.id);
+    if (!valid.length) { alert('記録がありません'); return; }
+    
+    let targets = [];
+    const q = (document.getElementById('searchInput').value || '').toLowerCase();
+    
+    if (mode === 'all') {
+      // 全件（位置情報があるもののみ）
+      targets = valid.filter(r => r.latitude && r.longitude);
+    } else if (mode === 'danger') {
+      // 判定Dのみ
+      targets = valid.filter(r => r.overall === 'D' && r.latitude && r.longitude);
+    } else if (mode === 'filtered') {
+      // 現在の検索結果から
+      let filtered = valid.filter(r =>
+        (r.species || '').toLowerCase().includes(q) ||
+        (r.location || '').toLowerCase().includes(q) ||
+        (r.inspector || '').toLowerCase().includes(q)
+      );
+      const s = document.getElementById('sortSelect').value;
+      if (s === 'date-desc') filtered.sort((a, b) => a.surveyDate < b.surveyDate ? 1 : -1);
+      else if (s === 'date-asc') filtered.sort((a, b) => a.surveyDate > b.surveyDate ? 1 : -1);
+      else { const o = {A:1, B:2, C:3, D:4}; filtered.sort((a, b) => (o[a.overall] || 5) - (o[b.overall] || 5)); }
+      targets = filtered.filter(r => r.latitude && r.longitude);
+    }
+    
+    if (!targets.length) {
+      alert('位置情報のある対象記録がありません。\n（緯度・経度が入力されたデータが必要です）');
+      return;
+    }
+    
+    const escXml = s => String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+    
+    const now = new Date().toISOString();
+    
+    const gradeLabel = r => {
+      const g = (r.overall || '').charAt(0);
+      return {A: '健全', B: '健全に近い', C: '要注意', D: '危険木'}[g] || r.overall || '';
+    };
+    
+    const wpts = targets.map(r => {
+      const lat = parseFloat(r.latitude);
+      const lon = parseFloat(r.longitude);
+      if (isNaN(lat) || isNaN(lon)) return '';
+      
+      const name = escXml(r.treeNo || r.id);
+      const sym = r.overall === 'D' ? 'Danger' :
+                  r.overall === 'C' ? 'Caution' :
+                  r.overall === 'B' ? 'Flag, Blue' : 'Flag, Green';
+      const desc = escXml([
+        `樹種: ${r.species || '不明'}`,
+        `調査日: ${r.surveyDate || ''}`,
+        `調査者: ${r.inspector || ''}`,
+        `場所: ${r.location || ''}`,
+        `樹高: ${r.treeHeight || ''}m  幹周: ${r.trunkGirth || ''}cm`,
+        `総合判定: ${gradeLabel(r)}`,
+        r.comment ? `所見: ${r.comment}` : '',
+        r.measures?.length ? `措置: ${r.measures.join('、')}` : ''
+      ].filter(Boolean).join(' | '));
+      
+      return `  <wpt lat="${lat}" lon="${lon}">
+    <name>${name}</name>
+    <desc>${desc}</desc>
+    <sym>${sym}</sym>
+    <type>${escXml(r.overall || '')}</type>
+    <time>${r.surveyDate ? r.surveyDate + 'T00:00:00Z' : now}</time>
+  </wpt>`;
+    }).filter(Boolean).join('\n');
+    
+    const modeLabel = mode === 'danger' ? '危険木のみ' : mode === 'filtered' ? '検索結果' : '全件';
+    const gpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="樹木診断・点検システム" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>樹木点検データ（${modeLabel}）</name>
+    <desc>樹木診断・点検システム エクスポート（${targets.length}件 / ${modeLabel}）</desc>
+    <time>${now}</time>
+  </metadata>
+${wpts}
+</gpx>`;
+    
+    dlBlob(
+      new Blob([gpx], {type: 'application/gpx+xml;charset=utf-8;'}),
+      `樹木点検_${modeLabel}_${new Date().toISOString().slice(0, 10)}.gpx`
+    );
+    alert(`✅ GPXファイルを出力しました（${targets.length}件 / ${modeLabel}）\n位置情報のない記録は除外されています。`);
+  };
 
   // ===== JSON統合 =====
   document.getElementById('jsonMergeInput').addEventListener('change', async function(e) {
