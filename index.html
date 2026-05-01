@@ -158,7 +158,7 @@
 
 <header class="hdr">
   <h1>樹木点検・診断システム</h1>
-  <div style="font-size:0.9rem;">26.7（IndexedDB写真保存・JSON統合・メール/SS送信）</div>
+  <div style="font-size:0.9rem;">26.7</div>
   <div style="font-size:0.72rem; color:rgba(255,255,255,0.8); margin-top:4px; line-height:1.4;">
     ※診断結果は参考になります。専門家(樹木医等)の判断を併せてご検討ください。
   </div>
@@ -315,28 +315,58 @@
           </select>
         </div>
         <div id="recordsList"></div>
-        <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn-sec" onclick="printInspectionPage()">🖨️ 現在画面を印刷</button>
-          <button class="btn-sec" onclick="exportAllToExcel()">📊 全件Excel出力</button>
-          <button class="btn-sec" onclick="exportAllToJSON()">📦 JSONバックアップ</button>
-          <button class="btn-sec" onclick="exportSummaryToExcel()">📋 一覧表Excel出力</button>
-          <button class="btn-sec" onclick="exportAllToCSV()">📄 CSV出力</button>
-           <button class="btn-sec" onclick="exportAllToCSV()">📄 CSV出力</button>
-          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-            <span style="font-size:0.78rem; color:#3949ab; font-weight:700;">📍 GPX出力:</span>
-            <button class="btn-sec" onclick="exportToGPX('all')" style="font-size:0.78rem; background:#e8f0fe; border-color:#3949ab; color:#1a237e;">全件</button>
-            <button class="btn-sec" onclick="exportToGPX('danger')" style="font-size:0.78rem; background:#ffebee; border-color:#c62828; color:#b71c1c;">判定Dのみ</button>
-            <button class="btn-sec" onclick="exportToGPX('filtered')" style="font-size:0.78rem; background:#e8f5e9; border-color:#2d5016; color:#2d5016;">表示中🔍</button>
+
+        <!-- ===== ボタングループ ===== -->
+        <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
+
+          <!-- 出力グループ -->
+          <div style="background:#f8faf5; border:1.5px solid #c8e0b0; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#2d5016; margin-bottom:8px; letter-spacing:0.04em;">📤 出力・エクスポート</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="exportAllToExcel()">📊 全件Excel</button>
+              <button class="btn-sec" onclick="exportSummaryToExcel()">📋 一覧表Excel</button>
+              <button class="btn-sec" onclick="exportAllToCSV()">📄 CSV</button>
+              <button class="btn-sec" onclick="printInspectionPage()">🖨️ 印刷</button>
+            </div>
           </div>
-          <input type="file" id="jsonImportInput" accept=".json,application/json" style="display:none;">
-          <input type="file" id="jsonImportInput" accept=".json,application/json" style="display:none;">
-          <input type="file" id="jsonMergeInput" accept=".json,application/json" multiple style="display:none;">
-          <button class="btn-sec" onclick="document.getElementById('jsonImportInput').click()">📂 JSON復元</button>
-          <button class="btn-sec" onclick="document.getElementById('jsonMergeInput').click()" style="background:#e8f5e9; border-color:#4a7c2f; color:#2d5016;">🔗 JSONを統合</button>
-          <button class="btn-sec" onclick="openMailModal()" style="background:#e3f2fd; border-color:#1565c0; color:#1565c0;">📧 メール送信</button>
-          <button class="btn-sec" onclick="openGasBulkModal()" style="background:#e8f5e9; border-color:#1b5e20; color:#1b5e20;">📊 スプレッドシート一括送信</button>
-          <button class="btn-sec" onclick="openGasSettings()" style="background:#f1f8e9; border-color:#558b2f; color:#33691e;">⚙️ スプレッドシート設定</button>
-          <button class="btn-sec" onclick="removeInvalidRecords()" style="background:#ffcdd2;">🧹 無効記録削除</button>
+
+          <!-- GPXグループ -->
+          <div style="background:#eff3ff; border:1.5px solid #9fa8da; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#1a237e; margin-bottom:8px; letter-spacing:0.04em;">📍 GPX出力（地図アプリ用）</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="exportToGPX('all')" style="background:#e8f0fe; border-color:#3949ab; color:#1a237e;">🗂️ 全件</button>
+              <button class="btn-sec" onclick="exportToGPX('danger')" style="background:#ffebee; border-color:#c62828; color:#b71c1c;">⚠️ 判定Dのみ</button>
+              <button class="btn-sec" onclick="exportToGPX('filtered')" style="background:#e8f5e9; border-color:#2d5016; color:#2d5016;">🔍 表示中のみ</button>
+            </div>
+          </div>
+
+          <!-- バックアップ・連携グループ -->
+          <div style="background:#f5faf5; border:1.5px solid #a5d6a7; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#1b5e20; margin-bottom:8px; letter-spacing:0.04em;">🔄 バックアップ・データ連携</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="exportAllToJSON()">📦 JSONバックアップ</button>
+              <input type="file" id="jsonImportInput" accept=".json,application/json" style="display:none;">
+              <input type="file" id="jsonMergeInput" accept=".json,application/json" multiple style="display:none;">
+              <button class="btn-sec" onclick="document.getElementById('jsonImportInput').click()">📂 JSON復元</button>
+              <button class="btn-sec" onclick="document.getElementById('jsonMergeInput').click()" style="background:#e8f5e9; border-color:#4a7c2f; color:#2d5016;">🔗 JSON統合</button>
+            </div>
+          </div>
+
+          <!-- 送信グループ -->
+          <div style="background:#f0f6ff; border:1.5px solid #90caf9; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#0d47a1; margin-bottom:8px; letter-spacing:0.04em;">📡 送信・共有</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="openMailModal()" style="background:#e3f2fd; border-color:#1565c0; color:#1565c0;">📧 メール送信</button>
+              <button class="btn-sec" onclick="openGasBulkModal()" style="background:#e8f5e9; border-color:#1b5e20; color:#1b5e20;">📊 スプレッドシート送信</button>
+              <button class="btn-sec" onclick="openGasSettings()" style="background:#f1f8e9; border-color:#558b2f; color:#33691e;">⚙️ SS設定</button>
+            </div>
+          </div>
+
+          <!-- メンテナンス -->
+          <div style="display:flex; justify-content:flex-end;">
+            <button class="btn-sec" onclick="removeInvalidRecords()" style="background:#ffcdd2; border-color:#e57373; color:#b71c1c; font-size:0.8rem;">🧹 無効記録を削除</button>
+          </div>
+
         </div>
       </div>
     </div>
