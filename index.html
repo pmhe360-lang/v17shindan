@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -86,88 +85,83 @@
     .pe-save-btn { background: #2d5016; color: white; padding: 8px 16px; border: none; border-radius: 20px; font-weight: 600; }
     .pe-close-btn { background: #555; color: white; padding: 8px 16px; border: none; border-radius: 20px; }
 
-```
-.help-icon {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: 50%;
-  background: #d1d1d1; color: #666; font-size: 0.75rem; font-weight: 700;
-  cursor: pointer; margin-left: 6px; text-decoration: none;
-  transition: all 0.15s; vertical-align: middle; flex-shrink: 0;
-  border: none; line-height: 1;
-}
-.help-icon:hover { background: #b0b0b0; color: #333; transform: scale(1.12); }
-.help-icon::after { content: '解説'; display: none; }
-.lbl { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
-.help-popup-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5); z-index: 9998;
-  display: none; align-items: center; justify-content: center;
-}
-.help-popup-overlay.open { display: flex; }
-.help-popup {
-  background: white; border-radius: 20px; width: 90vw; max-width: 500px;
-  max-height: 80vh; overflow-y: auto; padding: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative;
-}
-.help-popup h3 { font-size: 1.1rem; color: #2d5016; margin-bottom: 4px; }
-.help-popup .help-source { font-size: 0.7rem; color: #888; margin-bottom: 14px; }
-.help-popup .help-summary { font-size: 0.88rem; margin-bottom: 14px; line-height: 1.6; }
-.help-popup .help-criteria { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 0.82rem; }
-.help-popup .help-criteria th { background: #2d5016; color: white; padding: 6px 8px; text-align: left; }
-.help-popup .help-criteria td { padding: 6px 8px; border-bottom: 1px solid #eee; }
-.help-popup .help-check { background: #e8f5e9; padding: 10px 12px; border-radius: 8px; font-size: 0.82rem; margin-bottom: 8px; }
-.help-popup .help-danger { background: #ffebee; color: #b71c1c; padding: 10px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; }
-.help-popup .help-close {
-  position: absolute; top: 12px; right: 14px;
-  width: 28px; height: 28px; border-radius: 50%;
-  border: none; background: #eee; font-size: 1rem;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
+    .help-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: #d1d1d1; color: #555; font-size: 0.72rem; font-weight: 700;
+      cursor: pointer; margin-left: 5px; flex-shrink: 0;
+      transition: all 0.15s; vertical-align: middle;
+      border: none; line-height: 1; font-style: normal;
+    }
+    .help-icon:hover { background: #b0b0b0; color: #333; transform: scale(1.12); }
+    .help-popup-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 9998;
+      display: none; align-items: center; justify-content: center;
+    }
+    .help-popup-overlay.open { display: flex; }
+    .help-popup {
+      background: white; border-radius: 20px; width: 90vw; max-width: 500px;
+      max-height: 80vh; overflow-y: auto; padding: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative;
+    }
+    .help-popup h3 { font-size: 1.1rem; color: #2d5016; margin-bottom: 4px; }
+    .help-popup .help-source { font-size: 0.7rem; color: #888; margin-bottom: 14px; }
+    .help-popup .help-summary { font-size: 0.88rem; margin-bottom: 14px; line-height: 1.6; }
+    .help-popup .help-criteria { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 0.82rem; }
+    .help-popup .help-criteria th { background: #2d5016; color: white; padding: 6px 8px; text-align: left; }
+    .help-popup .help-criteria td { padding: 6px 8px; border-bottom: 1px solid #eee; }
+    .help-popup .help-check { background: #e8f5e9; padding: 10px 12px; border-radius: 8px; font-size: 0.82rem; margin-bottom: 8px; }
+    .help-popup .help-danger { background: #ffebee; color: #b71c1c; padding: 10px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; }
+    .help-popup .help-close {
+      position: absolute; top: 12px; right: 14px;
+      width: 28px; height: 28px; border-radius: 50%;
+      border: none; background: #eee; font-size: 1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
 
-/* モーダル共通 */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9200;
-  overflow-y: auto; padding: 20px 14px; display: none;
-}
-.modal-overlay.open { display: block; }
-.modal-panel {
-  background: white; border-radius: 20px; max-width: 520px; margin: 0 auto;
-  padding: 22px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-}
-.modal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 18px;
-}
-.modal-header h2 { font-size: 1.1rem; }
-.modal-close-btn {
-  background: none; border: none; font-size: 1.4rem;
-  cursor: pointer; color: #888;
-}
-.modal-form-group { margin-bottom: 14px; }
-.modal-form-group label { font-size: 0.85rem; font-weight: 700; color: #333; display: block; margin-bottom: 6px; }
-.modal-input { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 0.88rem; font-family: inherit; }
-.modal-code { background: #f0f0f0; padding: 1px 5px; border-radius: 4px; font-size: 0.82rem; }
+    /* モーダル共通 */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9200;
+      overflow-y: auto; padding: 20px 14px; display: none;
+    }
+    .modal-overlay.open { display: block; }
+    .modal-panel {
+      background: white; border-radius: 20px; max-width: 520px; margin: 0 auto;
+      padding: 22px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .modal-header h2 { font-size: 1.1rem; }
+    .modal-close-btn {
+      background: none; border: none; font-size: 1.4rem;
+      cursor: pointer; color: #888;
+    }
+    .modal-form-group { margin-bottom: 14px; }
+    .modal-form-group label { font-size: 0.85rem; font-weight: 700; color: #333; display: block; margin-bottom: 6px; }
+    .modal-input { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 0.88rem; font-family: inherit; }
+    .modal-code { background: #f0f0f0; padding: 1px 5px; border-radius: 4px; font-size: 0.82rem; }
 
-@media print {
-  body { background: white; padding: 0; }
-  .hdr, .tabs, .submit-area, .photo-del, .photo-save, .photo-edit,
-  .btn-sec, .btn-pri, .btn-cancel, .search-bar, .record-actions,
-  .tab-btn, .modal-overlay { display: none !important; }
-  .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-  .content { padding: 0; }
-  .tab-panel { display: block !important; }
-  #map, #allMap { height: 350px !important; border: 1px solid #000; break-inside: avoid; }
-  .card-body { padding: 8px; }
-}
-```
-
+    @media print {
+      body { background: white; padding: 0; }
+      .hdr, .tabs, .submit-area, .photo-del, .photo-save, .photo-edit,
+      .btn-sec, .btn-pri, .btn-cancel, .search-bar, .record-actions,
+      .tab-btn, .modal-overlay { display: none !important; }
+      .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+      .content { padding: 0; }
+      .tab-panel { display: block !important; }
+      #map, #allMap { height: 350px !important; border: 1px solid #000; break-inside: avoid; }
+      .card-body { padding: 8px; }
+    }
   </style>
 </head>
 <body>
 
 <header class="hdr">
   <h1>樹木点検・診断システム</h1>
-  <div style="font-size:0.9rem;">26.7</div>
+  <div style="font-size:0.9rem;">26.8（推論入力タブ追加・データベース化対応）</div>
   <div style="font-size:0.72rem; color:rgba(255,255,255,0.8); margin-top:4px; line-height:1.4;">
     ※診断結果は参考になります。専門家(樹木医等)の判断を併せてご検討ください。
   </div>
@@ -185,6 +179,7 @@
 
 <div class="tabs">
   <button class="tab-btn active" data-tab="inspect">📋 点検入力</button>
+  <button class="tab-btn" data-tab="inference">🔍 推論入力</button>
   <button class="tab-btn" data-tab="records">📚 記録一覧</button>
   <button class="tab-btn" data-tab="allmap">🗺️ 全体マップ</button>
   <button class="tab-btn" data-tab="guide">📖 判定基準</button>
@@ -311,8 +306,179 @@
     </div>
   </div>
 
-  <!-- 記録一覧タブ -->
+  <!-- 推論入力タブ -->
+  <div class="tab-panel" id="tab-inference">
 
+    <!-- 樹木選択 -->
+    <div class="card">
+      <div class="card-hdr green"><span class="sn">🔍</span>推論入力 — 診断根拠・治療方針の記録</div>
+      <div class="card-body">
+        <p style="font-size:0.82rem;color:#777;margin-bottom:12px;line-height:1.6;">点検で記録した樹木に対して、診断根拠・原因推定・治療方針・優先度をまとめます。このタブの内容は報告書の「診断推論」欄として使用できます。</p>
+        <div class="fg">
+          <label class="lbl">対象の樹木Noを選択</label>
+          <select class="inp" id="infTreeSelect" onchange="loadInferenceData()">
+            <option value="">— 樹木を選択 —</option>
+          </select>
+        </div>
+        <div id="infSelectedInfo" style="display:none;background:#f0f7ea;border-radius:10px;padding:10px 13px;margin-top:8px;font-size:0.85rem;color:#2d5016;line-height:1.8;"></div>
+      </div>
+    </div>
+
+    <!-- 診断根拠 -->
+    <div class="card" id="infFormArea" style="display:none;">
+      <div class="card-hdr" style="background:#e8f3df;color:#2d5016;border-left:4px solid #4a7c2f;">
+        <span class="sn">①</span>診断根拠・観察事実
+      </div>
+      <div class="card-body">
+        <p style="font-size:0.8rem;color:#888;margin-bottom:8px;">実際に観察した症状・事実を記録してください（活力度・健全度の評価根拠）</p>
+        <textarea class="inp" id="infEvidence" rows="4" placeholder="例：梢端部の約30%が枯死。根元南側にベッコウタケ（直径約15cm）を1個確認。幹周の打診で南側1/4に空洞音あり。葉色は全体にやや薄く葉サイズも小さめ。"></textarea>
+      </div>
+    </div>
+
+    <!-- 原因推定 -->
+    <div class="card" id="infCauseArea" style="display:none;">
+      <div class="card-hdr" style="background:#e8f3df;color:#2d5016;border-left:4px solid #4a7c2f;">
+        <span class="sn">②</span>原因推定・鑑別診断
+      </div>
+      <div class="card-body">
+        <p style="font-size:0.8rem;color:#888;margin-bottom:8px;">最も疑われる原因と、その他に考えられる原因を記録してください</p>
+        <div class="fg">
+          <label class="lbl">主因（最も疑われる原因）</label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;" id="infMainCauseChips">
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="腐朽（心材腐朽）">腐朽（心材）</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="腐朽（根株腐朽）">腐朽（根株）</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="根系障害（物理的）">根系障害（物理）</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="根系障害（土壌）">根系障害（土壌）</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="穿孔害虫">穿孔害虫</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="葉・枝の病害">葉・枝の病害</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="気象害（干ばつ・塩害等）">気象害</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="物理的損傷（車両接触等）">物理的損傷</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="加齢・老木化">加齢・老木化</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;">
+              <input type="radio" name="infMainCause" value="その他">その他</label>
+          </div>
+          <input class="inp" id="infMainCauseOther" placeholder="その他・詳細">
+        </div>
+        <div class="fg" style="margin-top:8px;">
+          <label class="lbl">鑑別（除外・要確認の原因）</label>
+          <textarea class="inp" id="infDifferential" rows="2" placeholder="例：排気ガス障害は除外（近傍に幹線道路なし）。過湿要因は要確認（排水状況不明）。"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 治療・処置方針 -->
+    <div class="card" id="infTreatArea" style="display:none;">
+      <div class="card-hdr" style="background:#e8f3df;color:#2d5016;border-left:4px solid #4a7c2f;">
+        <span class="sn">③</span>治療・処置方針
+      </div>
+      <div class="card-body">
+        <div class="fg">
+          <label class="lbl">推奨処置（複数選択可）</label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="伐採"> 伐採</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="危険枝除去"> 危険枝除去</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="腐朽部処理（外科治療）"> 外科治療</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="支柱設置・補強"> 支柱補強</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="土壌改良"> 土壌改良</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="施肥管理"> 施肥管理</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="病害虫防除"> 病害虫防除</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="精密診断（機器診断）"> 精密診断</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="立入禁止措置"> 立入禁止</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.83rem;padding:5px 10px;background:white;border:1.5px solid #ccc;border-radius:20px;cursor:pointer;"><input type="checkbox" class="inf-treat" value="経過観察"> 経過観察</label>
+          </div>
+          <textarea class="inp" id="infTreatDetail" rows="2" placeholder="処置の詳細・優先順位・注意事項など"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 緊急度・優先度 -->
+    <div class="card" id="infPriorityArea" style="display:none;">
+      <div class="card-hdr" style="background:#e8f3df;color:#2d5016;border-left:4px solid #4a7c2f;">
+        <span class="sn">④</span>緊急度・対応優先度
+      </div>
+      <div class="card-body">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;border:2px solid #b71c1c;background:#ffebee;cursor:pointer;font-weight:700;color:#b71c1c;font-size:0.88rem;">
+            <input type="radio" name="infPriority" value="緊急（即日対応）"> 🚨 緊急（即日）</label>
+          <label style="display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;border:2px solid #e65100;background:#fff3e0;cursor:pointer;font-weight:700;color:#e65100;font-size:0.88rem;">
+            <input type="radio" name="infPriority" value="早急（1週間以内）"> ⚠️ 早急（1週間）</label>
+          <label style="display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;border:2px solid #f9a825;background:#fff8e1;cursor:pointer;font-weight:700;color:#e65100;font-size:0.88rem;">
+            <input type="radio" name="infPriority" value="計画的対応（1ヶ月以内）"> 📅 計画的（1ヶ月）</label>
+          <label style="display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;border:2px solid #4a7c2f;background:#f0f7ea;cursor:pointer;font-weight:700;color:#2d5016;font-size:0.88rem;">
+            <input type="radio" name="infPriority" value="経過観察（次回点検時）"> 🌿 経過観察</label>
+        </div>
+        <textarea class="inp" id="infPriorityNote" rows="2" placeholder="優先度の根拠・対応時の注意事項など"></textarea>
+      </div>
+    </div>
+
+    <!-- 次回点検 -->
+    <div class="card" id="infNextArea" style="display:none;">
+      <div class="card-hdr" style="background:#e8f3df;color:#2d5016;border-left:4px solid #4a7c2f;">
+        <span class="sn">⑤</span>次回点検・フォローアップ
+      </div>
+      <div class="card-body">
+        <div class="frow c2">
+          <div class="fg">
+            <label class="lbl">次回点検推奨時期</label>
+            <select class="inp" id="infNextCheck">
+              <option value="">— 選択 —</option>
+              <option>1ヶ月後</option>
+              <option>3ヶ月後</option>
+              <option>6ヶ月後</option>
+              <option>1年後</option>
+              <option>処置後に再点検</option>
+              <option>次年度定期点検</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="lbl">確認すべき重点項目</label>
+            <input class="inp" id="infNextFocus" placeholder="例：空洞の拡大状況、腐朽菌の再発">
+          </div>
+        </div>
+        <textarea class="inp" id="infNextNote" rows="2" placeholder="フォローアップに関する特記事項"></textarea>
+      </div>
+    </div>
+
+    <!-- 保存ボタン -->
+    <div class="card" id="infSaveArea" style="display:none;">
+      <div class="card-body">
+
+        <!-- AI学習提供オプション -->
+        <div id="infContributeArea" style="display:none; background:#e8f5e9; border:1.5px solid #a5d6a7; border-radius:14px; padding:12px 14px; margin-bottom:14px;">
+          <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer;">
+            <input type="checkbox" id="infContribute" style="width:18px; height:18px; margin-top:2px; flex-shrink:0;">
+            <div>
+              <div style="font-size:0.85rem; font-weight:700; color:#1b5e20; margin-bottom:4px;">
+                🤝 診断根拠をAI学習データとして匿名提供する
+              </div>
+              <div style="font-size:0.78rem; color:#388e3c; line-height:1.6;">
+                診断根拠・鑑別診断・処置詳細の記述内容を、樹木診断AIの学習データとして提供します。<br>
+                <strong>個人名・正確な場所は送信されません。</strong>データ提供に同意済みの場合のみ有効です。
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="submit-area">
+          <button class="btn-pri" onclick="saveInference()">💾 推論を保存</button>
+          <button class="btn-sec" onclick="clearInferenceForm()">🔄 クリア</button>
+          <button class="btn-sec" onclick="exportInferenceToText()" style="background:#e3f2fd;color:#1565c0;border-color:#1565c0;">📄 テキスト出力</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 記録一覧タブ -->
   <div class="tab-panel" id="tab-records">
     <div class="card">
       <div class="card-body">
@@ -328,68 +494,64 @@
         </div>
         <div id="recordsList"></div>
 
-```
-    <!-- ===== ボタングループ ===== -->
-    <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
+        <!-- ===== ボタングループ ===== -->
+        <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
 
-      <!-- 出力グループ -->
-      <div style="background:#f8faf5; border:1.5px solid #c8e0b0; border-radius:14px; padding:10px 12px;">
-        <div style="font-size:0.75rem; font-weight:700; color:#2d5016; margin-bottom:8px; letter-spacing:0.04em;">📤 出力・エクスポート</div>
-        <div style="display:flex; flex-wrap:wrap; gap:7px;">
-          <button class="btn-sec" onclick="openExcelSelectModal()">📊 全件Excel</button>
-          <button class="btn-sec" onclick="exportSummaryToExcel()">📋 一覧表Excel</button>
-          <button class="btn-sec" onclick="exportAllToCSV()">📄 CSV</button>
-          <button class="btn-sec" onclick="printInspectionPage()">🖨️ 印刷</button>
-          <button class="btn-sec" onclick="openPhotoZipModal()" style="background:#fff8e1; border-color:#f9a825; color:#e65100;">🖼️ 写真ZIP</button>
+          <!-- 出力グループ -->
+          <div style="background:#f8faf5; border:1.5px solid #c8e0b0; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#2d5016; margin-bottom:8px; letter-spacing:0.04em;">📤 出力・エクスポート</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="openExcelSelectModal()">📊 全件Excel</button>
+              <button class="btn-sec" onclick="exportSummaryToExcel()">📋 一覧表Excel</button>
+              <button class="btn-sec" onclick="exportAllToCSV()">📄 CSV</button>
+              <button class="btn-sec" onclick="printInspectionPage()">🖨️ 印刷</button>
+              <button class="btn-sec" onclick="openPhotoZipModal()" style="background:#fff8e1; border-color:#f9a825; color:#e65100;">🖼️ 写真ZIP</button>
+            </div>
+          </div>
+
+          <!-- GPXグループ -->
+          <div style="background:#eff3ff; border:1.5px solid #9fa8da; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#1a237e; margin-bottom:8px; letter-spacing:0.04em;">📍 GPX出力（地図アプリ用）</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="exportToGPX('all')" style="background:#e8f0fe; border-color:#3949ab; color:#1a237e;">🗂️ 全件</button>
+              <button class="btn-sec" onclick="exportToGPX('danger')" style="background:#ffebee; border-color:#c62828; color:#b71c1c;">⚠️ 判定Dのみ</button>
+              <button class="btn-sec" onclick="exportToGPX('filtered')" style="background:#e8f5e9; border-color:#2d5016; color:#2d5016;">🔍 表示中のみ</button>
+            </div>
+          </div>
+
+          <!-- バックアップ・連携グループ -->
+          <div style="background:#f5faf5; border:1.5px solid #a5d6a7; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#1b5e20; margin-bottom:8px; letter-spacing:0.04em;">🔄 バックアップ・データ連携</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="exportAllToJSON()">📦 JSONバックアップ</button>
+              <input type="file" id="jsonImportInput" accept=".json,application/json" style="display:none;">
+              <input type="file" id="jsonMergeInput" accept=".json,application/json" multiple style="display:none;">
+              <button class="btn-sec" onclick="document.getElementById('jsonImportInput').click()">📂 JSON復元</button>
+              <button class="btn-sec" onclick="document.getElementById('jsonMergeInput').click()" style="background:#e8f5e9; border-color:#4a7c2f; color:#2d5016;">🔗 JSON統合</button>
+            </div>
+          </div>
+
+          <!-- 送信グループ -->
+          <div style="background:#f0f6ff; border:1.5px solid #90caf9; border-radius:14px; padding:10px 12px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#0d47a1; margin-bottom:8px; letter-spacing:0.04em;">📡 送信・共有</div>
+            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+              <button class="btn-sec" onclick="openMailModal()" style="background:#e3f2fd; border-color:#1565c0; color:#1565c0;">📧 メール送信</button>
+              <button class="btn-sec" onclick="openGasBulkModal()" style="background:#e8f5e9; border-color:#1b5e20; color:#1b5e20;">📊 スプレッドシート送信</button>
+              <button class="btn-sec" onclick="openGasSettings()" style="background:#f1f8e9; border-color:#558b2f; color:#33691e;">⚙️ SS設定</button>
+            </div>
+          </div>
+
+          <!-- メンテナンス -->
+          <div style="display:flex; justify-content:flex-end;">
+            <button class="btn-sec" onclick="removeInvalidRecords()" style="background:#ffcdd2; border-color:#e57373; color:#b71c1c; font-size:0.8rem;">🧹 無効記録を削除</button>
+          </div>
+
         </div>
       </div>
-
-      <!-- GPXグループ -->
-      <div style="background:#eff3ff; border:1.5px solid #9fa8da; border-radius:14px; padding:10px 12px;">
-        <div style="font-size:0.75rem; font-weight:700; color:#1a237e; margin-bottom:8px; letter-spacing:0.04em;">📍 GPX出力（地図アプリ用）</div>
-        <div style="display:flex; flex-wrap:wrap; gap:7px;">
-          <button class="btn-sec" onclick="exportToGPX('all')" style="background:#e8f0fe; border-color:#3949ab; color:#1a237e;">🗂️ 全件</button>
-          <button class="btn-sec" onclick="exportToGPX('danger')" style="background:#ffebee; border-color:#c62828; color:#b71c1c;">⚠️ 判定Dのみ</button>
-          <button class="btn-sec" onclick="exportToGPX('filtered')" style="background:#e8f5e9; border-color:#2d5016; color:#2d5016;">🔍 表示中のみ</button>
-        </div>
-      </div>
-
-      <!-- バックアップ・連携グループ -->
-      <div style="background:#f5faf5; border:1.5px solid #a5d6a7; border-radius:14px; padding:10px 12px;">
-        <div style="font-size:0.75rem; font-weight:700; color:#1b5e20; margin-bottom:8px; letter-spacing:0.04em;">🔄 バックアップ・データ連携</div>
-        <div style="display:flex; flex-wrap:wrap; gap:7px;">
-          <button class="btn-sec" onclick="exportAllToJSON()">📦 JSONバックアップ</button>
-          <input type="file" id="jsonImportInput" accept=".json,application/json" style="display:none;">
-          <input type="file" id="jsonMergeInput" accept=".json,application/json" multiple style="display:none;">
-          <button class="btn-sec" onclick="document.getElementById('jsonImportInput').click()">📂 JSON復元</button>
-          <button class="btn-sec" onclick="document.getElementById('jsonMergeInput').click()" style="background:#e8f5e9; border-color:#4a7c2f; color:#2d5016;">🔗 JSON統合</button>
-        </div>
-      </div>
-
-      <!-- 送信グループ -->
-      <div style="background:#f0f6ff; border:1.5px solid #90caf9; border-radius:14px; padding:10px 12px;">
-        <div style="font-size:0.75rem; font-weight:700; color:#0d47a1; margin-bottom:8px; letter-spacing:0.04em;">📡 送信・共有</div>
-        <div style="display:flex; flex-wrap:wrap; gap:7px;">
-          <button class="btn-sec" onclick="openMailModal()" style="background:#e3f2fd; border-color:#1565c0; color:#1565c0;">📧 メール送信</button>
-          <button class="btn-sec" onclick="openGasBulkModal()" style="background:#e8f5e9; border-color:#1b5e20; color:#1b5e20;">📊 スプレッドシート送信</button>
-          <button class="btn-sec" onclick="openGasSettings()" style="background:#f1f8e9; border-color:#558b2f; color:#33691e;">⚙️ SS設定</button>
-        </div>
-      </div>
-
-      <!-- メンテナンス -->
-      <div style="display:flex; justify-content:flex-end;">
-        <button class="btn-sec" onclick="removeInvalidRecords()" style="background:#ffcdd2; border-color:#e57373; color:#b71c1c; font-size:0.8rem;">🧹 無効記録を削除</button>
-      </div>
-
     </div>
-  </div>
-</div>
-```
-
   </div>
 
   <!-- 全体マップタブ -->
-
   <div class="tab-panel" id="tab-allmap">
     <div class="card">
       <div class="card-hdr green">🗺️ 全樹木位置マップ</div>
@@ -405,7 +567,6 @@
   </div>
 
   <!-- 判定基準タブ -->
-
   <div class="tab-panel" id="tab-guide">
     <div class="card"><div class="card-body">
       <h3>活力度 0〜4</h3><p>各項目の状態を0(最良)〜4(最悪)で評価</p>
@@ -425,8 +586,56 @@
   </div>
 </div>
 
-<!-- ヘルプポップアップ -->
+<!-- データ収集同意ダイアログ -->
+<div class="modal-overlay" id="consentModal" style="z-index:99999; align-items:flex-end;">
+  <div class="modal-panel" style="max-width:480px; border-radius:20px 20px 0 0; padding-bottom:30px;">
+    <div style="text-align:center; padding:6px 0 14px;">
+      <div style="font-size:2rem;">🌳</div>
+      <h2 style="color:#2d5016; font-size:1.1rem; margin-bottom:6px;">樹木診断システムへようこそ</h2>
+      <p style="font-size:0.82rem; color:#666;">ご利用の前に、以下をご確認ください</p>
+    </div>
 
+    <div style="background:#f0f7ea; border-radius:14px; padding:14px; margin-bottom:14px; font-size:0.83rem; line-height:1.8; color:#333;">
+      <p style="font-weight:700; color:#2d5016; margin-bottom:8px;">📊 データの収集について</p>
+      <p>本システムでは、<strong>システムの改善・樹木診断データベースの構築</strong>を目的として、以下の<strong>匿名化された統計情報</strong>を収集させていただく場合があります。</p>
+      <ul style="padding-left:16px; margin-top:8px;">
+        <li>樹種・総合判定結果（A〜D）</li>
+        <li>活力度・健全度の評価値（数値のみ）</li>
+        <li>腐朽菌の種類・発生状況</li>
+        <li>都道府県レベルの地域情報</li>
+        <li>推論入力の主因・処置方針・優先度（選択肢のみ）</li>
+        <li>診断根拠の記述内容（推論入力で個別に同意した場合のみ）</li>
+      </ul>
+      <p style="margin-top:8px; font-size:0.8rem; color:#555; line-height:1.6;">
+        収集したデータは<strong>樹木診断AIの学習・精度向上</strong>および<strong>街路樹・公園樹の健全度データベース構築</strong>を目的として使用します。
+      </p>
+    </div>
+
+    <div style="background:#fff8e1; border:1.5px solid #f9a825; border-radius:14px; padding:12px; margin-bottom:14px; font-size:0.82rem; line-height:1.7; color:#5d4037;">
+      <p style="font-weight:700; margin-bottom:4px;">🔒 収集しない情報</p>
+      <p>調査者名・氏名・所属、正確なGPS座標（建物・個人が特定できる精度の位置情報）、所見・コメント等の自由記述、写真データは<strong>一切収集しません。</strong></p>
+    </div>
+
+    <div style="font-size:0.8rem; color:#888; margin-bottom:16px; line-height:1.6; padding:0 4px;">
+      収集したデータは<strong>個人・場所が特定できない統計情報</strong>として、街路樹・公園樹の健全度データベース構築・研究目的にのみ使用します。データ提供に参加しない場合でも、本システムはすべての機能を無料でご利用いただけます。
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button onclick="giveConsent(true)" style="width:100%;padding:14px;background:#2d5016;color:white;border:none;border-radius:40px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;">
+        ✅ 同意してデータ提供に参加する
+      </button>
+      <button onclick="giveConsent(false)" style="width:100%;padding:12px;background:white;color:#555;border:1.5px solid #ccc;border-radius:40px;font-weight:600;font-size:0.9rem;cursor:pointer;font-family:inherit;">
+        参加しない（すべての機能は引き続き利用できます）
+      </button>
+    </div>
+
+    <p style="font-size:0.72rem; color:#aaa; text-align:center; margin-top:12px;">
+      この設定は後からシステム設定で変更できます
+    </p>
+  </div>
+</div>
+
+<!-- ヘルプポップアップ -->
 <div class="help-popup-overlay" id="helpPopupOverlay" onclick="closeHelpPopup()">
   <div class="help-popup" id="helpPopup" onclick="event.stopPropagation()">
     <button class="help-close" onclick="closeHelpPopup()">✕</button>
@@ -435,7 +644,6 @@
 </div>
 
 <!-- 写真編集モーダル -->
-
 <div id="photoEditModal">
   <div class="pe-container">
     <div class="pe-toolbar">
@@ -480,7 +688,6 @@
 </div>
 
 <!-- メール送信モーダル -->
-
 <div class="modal-overlay" id="mailModal">
   <div class="modal-panel">
     <div class="modal-header">
@@ -529,7 +736,6 @@
 </div>
 
 <!-- アドレス帳モーダル -->
-
 <div class="modal-overlay" id="addressModal">
   <div class="modal-panel">
     <div class="modal-header">
@@ -548,7 +754,6 @@
 </div>
 
 <!-- 写真ZIP出力モーダル -->
-
 <div class="modal-overlay" id="photoZipModal">
   <div class="modal-panel" style="max-width:480px;">
     <div class="modal-header">
@@ -560,56 +765,52 @@
       ファイル名：<code style="background:#f4f4f4;padding:2px 6px;border-radius:4px;">C001_01.jpg, C001_02.jpg …</code>
     </p>
 
-```
-<!-- 対象選択タブ -->
-<div style="display:flex; gap:6px; margin-bottom:14px; background:#f2f2f2; padding:5px; border-radius:40px;">
-  <button id="zipMode-all"   onclick="setZipMode('all')"   style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:#e65100;color:white;">全件</button>
-  <button id="zipMode-pick"  onclick="setZipMode('pick')"  style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:transparent;color:#555;">個別指定</button>
-</div>
-
-<!-- 全件パネル -->
-<div id="zipPanel-all">
-  <p id="zipAllCount" style="font-size:0.85rem;color:#e65100;font-weight:700;background:#fff8e1;padding:10px 14px;border-radius:10px;"></p>
-</div>
-
-<!-- 個別指定パネル -->
-<div id="zipPanel-pick" style="display:none;">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-    <p style="font-size:0.82rem;color:#555;">写真のある樹木Noを選択</p>
-    <div style="display:flex;gap:6px;">
-      <button onclick="zipPickAll(true)"  style="font-size:0.75rem;padding:4px 10px;background:#fff8e1;border:1px solid #f9a825;border-radius:20px;color:#e65100;cursor:pointer;">全選択</button>
-      <button onclick="zipPickAll(false)" style="font-size:0.75rem;padding:4px 10px;background:#f5f5f5;border:1px solid #bbb;border-radius:20px;color:#555;cursor:pointer;">全解除</button>
+    <!-- 対象選択タブ -->
+    <div style="display:flex; gap:6px; margin-bottom:14px; background:#f2f2f2; padding:5px; border-radius:40px;">
+      <button id="zipMode-all"   onclick="setZipMode('all')"   style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:#e65100;color:white;">全件</button>
+      <button id="zipMode-pick"  onclick="setZipMode('pick')"  style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:transparent;color:#555;">個別指定</button>
     </div>
-  </div>
-  <div id="zipPickList" style="display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow-y:auto;padding:10px;background:#fafafa;border:1.5px solid #eee;border-radius:12px;"></div>
-  <p id="zipPickCount" style="font-size:0.82rem;color:#e65100;font-weight:700;margin-top:8px;text-align:right;"></p>
-</div>
 
-<!-- フォルダ分け設定 -->
-<div style="margin-top:14px;background:#f8f8f8;border-radius:12px;padding:10px 14px;">
-  <label style="font-size:0.82rem;font-weight:700;color:#333;display:flex;align-items:center;gap:8px;cursor:pointer;">
-    <input type="checkbox" id="zipFolderSplit" checked style="width:16px;height:16px;">
-    樹木Noごとにフォルダ分け（例：<code>C001/C001_01.jpg</code>）
-  </label>
-  <p style="font-size:0.75rem;color:#888;margin-top:4px;">オフにすると全写真がフラットに並びます</p>
-</div>
+    <!-- 全件パネル -->
+    <div id="zipPanel-all">
+      <p id="zipAllCount" style="font-size:0.85rem;color:#e65100;font-weight:700;background:#fff8e1;padding:10px 14px;border-radius:10px;"></p>
+    </div>
 
-<div id="zipProgress" style="display:none;margin-top:12px;text-align:center;">
-  <p style="font-size:0.88rem;color:#e65100;font-weight:700;">📦 ZIP作成中...</p>
-  <div style="background:#eee;border-radius:20px;height:8px;margin-top:8px;overflow:hidden;">
-    <div id="zipProgressBar" style="background:#e65100;height:100%;width:0%;transition:width 0.2s;border-radius:20px;"></div>
-  </div>
-  <p id="zipProgressText" style="font-size:0.78rem;color:#888;margin-top:4px;"></p>
-</div>
+    <!-- 個別指定パネル -->
+    <div id="zipPanel-pick" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <p style="font-size:0.82rem;color:#555;">写真のある樹木Noを選択</p>
+        <div style="display:flex;gap:6px;">
+          <button onclick="zipPickAll(true)"  style="font-size:0.75rem;padding:4px 10px;background:#fff8e1;border:1px solid #f9a825;border-radius:20px;color:#e65100;cursor:pointer;">全選択</button>
+          <button onclick="zipPickAll(false)" style="font-size:0.75rem;padding:4px 10px;background:#f5f5f5;border:1px solid #bbb;border-radius:20px;color:#555;cursor:pointer;">全解除</button>
+        </div>
+      </div>
+      <div id="zipPickList" style="display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow-y:auto;padding:10px;background:#fafafa;border:1.5px solid #eee;border-radius:12px;"></div>
+      <p id="zipPickCount" style="font-size:0.82rem;color:#e65100;font-weight:700;margin-top:8px;text-align:right;"></p>
+    </div>
 
-<button onclick="runPhotoZipExport()" id="zipRunBtn" style="width:100%;margin-top:18px;padding:14px;background:#e65100;color:white;border:none;border-radius:40px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;">📥 ZIPをダウンロード</button>
-```
+    <!-- フォルダ分け設定 -->
+    <div style="margin-top:14px;background:#f8f8f8;border-radius:12px;padding:10px 14px;">
+      <label style="font-size:0.82rem;font-weight:700;color:#333;display:flex;align-items:center;gap:8px;cursor:pointer;">
+        <input type="checkbox" id="zipFolderSplit" checked style="width:16px;height:16px;">
+        樹木Noごとにフォルダ分け（例：<code>C001/C001_01.jpg</code>）
+      </label>
+      <p style="font-size:0.75rem;color:#888;margin-top:4px;">オフにすると全写真がフラットに並びます</p>
+    </div>
 
+    <div id="zipProgress" style="display:none;margin-top:12px;text-align:center;">
+      <p style="font-size:0.88rem;color:#e65100;font-weight:700;">📦 ZIP作成中...</p>
+      <div style="background:#eee;border-radius:20px;height:8px;margin-top:8px;overflow:hidden;">
+        <div id="zipProgressBar" style="background:#e65100;height:100%;width:0%;transition:width 0.2s;border-radius:20px;"></div>
+      </div>
+      <p id="zipProgressText" style="font-size:0.78rem;color:#888;margin-top:4px;"></p>
+    </div>
+
+    <button onclick="runPhotoZipExport()" id="zipRunBtn" style="width:100%;margin-top:18px;padding:14px;background:#e65100;color:white;border:none;border-radius:40px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;">📥 ZIPをダウンロード</button>
   </div>
 </div>
 
 <!-- Excel出力範囲選択モーダル -->
-
 <div class="modal-overlay" id="excelSelectModal">
   <div class="modal-panel" style="max-width:480px;">
     <div class="modal-header">
@@ -617,58 +818,54 @@
       <button class="modal-close-btn" onclick="closeExcelSelectModal()">✕</button>
     </div>
 
-```
-<!-- モード選択タブ -->
-<div style="display:flex; gap:6px; margin-bottom:16px; background:#f2f2f2; padding:5px; border-radius:40px;">
-  <button id="xlsMode-all"      onclick="setXlsMode('all')"      style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:#4a7c2f;color:white;">全件</button>
-  <button id="xlsMode-range"    onclick="setXlsMode('range')"    style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:transparent;color:#555;">範囲指定</button>
-  <button id="xlsMode-pick"     onclick="setXlsMode('pick')"     style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:transparent;color:#555;">個別指定</button>
-</div>
-
-<!-- 全件モード -->
-<div id="xlsPanel-all" style="display:block;">
-  <p style="font-size:0.88rem;color:#555;padding:12px;background:#f8faf5;border-radius:10px;">登録されている全件を出力します。</p>
-</div>
-
-<!-- 範囲指定モード -->
-<div id="xlsPanel-range" style="display:none;">
-  <p style="font-size:0.82rem;color:#555;margin-bottom:10px;">樹木Noの開始〜終了を選択してください。</p>
-  <div style="display:flex;gap:10px;align-items:center;">
-    <div style="flex:1;">
-      <label style="font-size:0.8rem;font-weight:700;color:#333;display:block;margin-bottom:4px;">開始</label>
-      <select id="xlsRangeFrom" class="modal-input" style="padding:10px 8px;"></select>
+    <!-- モード選択タブ -->
+    <div style="display:flex; gap:6px; margin-bottom:16px; background:#f2f2f2; padding:5px; border-radius:40px;">
+      <button id="xlsMode-all"      onclick="setXlsMode('all')"      style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:#4a7c2f;color:white;">全件</button>
+      <button id="xlsMode-range"    onclick="setXlsMode('range')"    style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:transparent;color:#555;">範囲指定</button>
+      <button id="xlsMode-pick"     onclick="setXlsMode('pick')"     style="flex:1;padding:8px 4px;border:none;border-radius:30px;font-weight:600;font-size:0.85rem;cursor:pointer;background:transparent;color:#555;">個別指定</button>
     </div>
-    <div style="padding-top:18px;color:#888;font-size:1.2rem;">〜</div>
-    <div style="flex:1;">
-      <label style="font-size:0.8rem;font-weight:700;color:#333;display:block;margin-bottom:4px;">終了</label>
-      <select id="xlsRangeTo" class="modal-input" style="padding:10px 8px;"></select>
+
+    <!-- 全件モード -->
+    <div id="xlsPanel-all" style="display:block;">
+      <p style="font-size:0.88rem;color:#555;padding:12px;background:#f8faf5;border-radius:10px;">登録されている全件を出力します。</p>
     </div>
-  </div>
-  <p id="xlsRangeCount" style="font-size:0.82rem;color:#4a7c2f;font-weight:700;margin-top:10px;text-align:right;"></p>
-</div>
 
-<!-- 個別指定モード -->
-<div id="xlsPanel-pick" style="display:none;">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-    <p style="font-size:0.82rem;color:#555;">出力したい樹木Noにチェックを入れてください。</p>
-    <div style="display:flex;gap:6px;">
-      <button onclick="xlsPickAll(true)"  style="font-size:0.75rem;padding:4px 10px;background:#e8f5e9;border:1px solid #4a7c2f;border-radius:20px;color:#2d5016;cursor:pointer;">全選択</button>
-      <button onclick="xlsPickAll(false)" style="font-size:0.75rem;padding:4px 10px;background:#f5f5f5;border:1px solid #bbb;border-radius:20px;color:#555;cursor:pointer;">全解除</button>
+    <!-- 範囲指定モード -->
+    <div id="xlsPanel-range" style="display:none;">
+      <p style="font-size:0.82rem;color:#555;margin-bottom:10px;">樹木Noの開始〜終了を選択してください。</p>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div style="flex:1;">
+          <label style="font-size:0.8rem;font-weight:700;color:#333;display:block;margin-bottom:4px;">開始</label>
+          <select id="xlsRangeFrom" class="modal-input" style="padding:10px 8px;"></select>
+        </div>
+        <div style="padding-top:18px;color:#888;font-size:1.2rem;">〜</div>
+        <div style="flex:1;">
+          <label style="font-size:0.8rem;font-weight:700;color:#333;display:block;margin-bottom:4px;">終了</label>
+          <select id="xlsRangeTo" class="modal-input" style="padding:10px 8px;"></select>
+        </div>
+      </div>
+      <p id="xlsRangeCount" style="font-size:0.82rem;color:#4a7c2f;font-weight:700;margin-top:10px;text-align:right;"></p>
     </div>
-  </div>
-  <div id="xlsPickList" style="display:flex;flex-wrap:wrap;gap:6px;max-height:240px;overflow-y:auto;padding:10px;background:#fafafa;border:1.5px solid #eee;border-radius:12px;"></div>
-  <p id="xlsPickCount" style="font-size:0.82rem;color:#4a7c2f;font-weight:700;margin-top:8px;text-align:right;"></p>
-</div>
 
-<!-- 出力ボタン -->
-<button onclick="runExcelExport()" style="width:100%;margin-top:18px;padding:14px;background:#2d5016;color:white;border:none;border-radius:40px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;">📥 Excelを出力する</button>
-```
+    <!-- 個別指定モード -->
+    <div id="xlsPanel-pick" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <p style="font-size:0.82rem;color:#555;">出力したい樹木Noにチェックを入れてください。</p>
+        <div style="display:flex;gap:6px;">
+          <button onclick="xlsPickAll(true)"  style="font-size:0.75rem;padding:4px 10px;background:#e8f5e9;border:1px solid #4a7c2f;border-radius:20px;color:#2d5016;cursor:pointer;">全選択</button>
+          <button onclick="xlsPickAll(false)" style="font-size:0.75rem;padding:4px 10px;background:#f5f5f5;border:1px solid #bbb;border-radius:20px;color:#555;cursor:pointer;">全解除</button>
+        </div>
+      </div>
+      <div id="xlsPickList" style="display:flex;flex-wrap:wrap;gap:6px;max-height:240px;overflow-y:auto;padding:10px;background:#fafafa;border:1.5px solid #eee;border-radius:12px;"></div>
+      <p id="xlsPickCount" style="font-size:0.82rem;color:#4a7c2f;font-weight:700;margin-top:8px;text-align:right;"></p>
+    </div>
 
+    <!-- 出力ボタン -->
+    <button onclick="runExcelExport()" style="width:100%;margin-top:18px;padding:14px;background:#2d5016;color:white;border:none;border-radius:40px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;">📥 Excelを出力する</button>
   </div>
 </div>
 
 <!-- スプレッドシート設定モーダル -->
-
 <div class="modal-overlay" id="gasSettingsModal">
   <div class="modal-panel">
     <div class="modal-header">
@@ -691,7 +888,7 @@
       </div>
       <div>
         <label style="font-size:0.85rem; font-weight:700; color:#333; display:block; margin-bottom:6px;">🔑 アクセストークン（パスワード）</label>
-        <input type="text" id="gasToken" class="modal-input" placeholder="例：tree_inspect_2024">
+        <input type="text" id="gasToken" class="modal-input" placeholder="例：tree_inspect_2026">
         <div style="font-size:0.75rem; color:#888; margin-top:4px;">GASスクリプト内の <code class="modal-code">ACCESS_TOKEN</code> と同じ値にしてください</div>
       </div>
       <div>
@@ -699,40 +896,36 @@
         <input type="text" id="gasSenderName" class="modal-input" placeholder="例：造園係 田中">
       </div>
 
-```
-  <!-- Google Drive連携設定 -->
-  <div style="background:#e8f0fe; border-radius:12px; padding:14px;">
-    <label style="font-size:0.85rem; font-weight:700; color:#0d47a1; display:flex; align-items:center; gap:8px; cursor:pointer; margin-bottom:10px;">
-      <input type="checkbox" id="gasDriveEnabled" style="width:17px;height:17px;">
-      📁 Google Driveへの写真保存を有効にする
-    </label>
-    <div id="driveSettingsArea" style="display:none; margin-top:6px; display:flex; flex-direction:column; gap:10px;">
-      <div>
-        <label style="font-size:0.82rem; font-weight:700; color:#333; display:block; margin-bottom:4px;">📂 保存先フォルダID（省略時はマイドライブ直下）</label>
-        <input type="text" id="gasDriveFolderId" class="modal-input" placeholder="例：1aBcDeFgHiJkLmNoPqRsTuV（DriveフォルダURLの末尾）" style="font-size:0.8rem;">
-        <div style="font-size:0.73rem; color:#555; margin-top:4px; line-height:1.5;">
-          Drive URL：<code>https://drive.google.com/drive/folders/<strong>ここがID</strong></code>
+      <!-- Google Drive連携設定 -->
+      <div style="background:#e8f0fe; border-radius:12px; padding:14px;">
+        <label style="font-size:0.85rem; font-weight:700; color:#0d47a1; display:flex; align-items:center; gap:8px; cursor:pointer; margin-bottom:10px;">
+          <input type="checkbox" id="gasDriveEnabled" style="width:17px;height:17px;">
+          📁 Google Driveへの写真保存を有効にする
+        </label>
+        <div id="driveSettingsArea" style="display:none; margin-top:6px; display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="font-size:0.82rem; font-weight:700; color:#333; display:block; margin-bottom:4px;">📂 保存先フォルダID（省略時はマイドライブ直下）</label>
+            <input type="text" id="gasDriveFolderId" class="modal-input" placeholder="例：1aBcDeFgHiJkLmNoPqRsTuV（DriveフォルダURLの末尾）" style="font-size:0.8rem;">
+            <div style="font-size:0.73rem; color:#555; margin-top:4px; line-height:1.5;">
+              Drive URL：<code>https://drive.google.com/drive/folders/<strong>ここがID</strong></code>
+            </div>
+          </div>
+          <div style="font-size:0.78rem; color:#1565c0; background:#e3f2fd; border-radius:8px; padding:10px; line-height:1.7;">
+            📌 保存構造：<strong>指定フォルダ / 樹木No / 樹木No_01.jpg</strong><br>
+            📌 スプレッドシートの各タブに写真リンク列も追加されます
+          </div>
         </div>
       </div>
-      <div style="font-size:0.78rem; color:#1565c0; background:#e3f2fd; border-radius:8px; padding:10px; line-height:1.7;">
-        📌 保存構造：<strong>指定フォルダ / 樹木No / 樹木No_01.jpg</strong><br>
-        📌 スプレッドシートの各タブに写真リンク列も追加されます
-      </div>
     </div>
-  </div>
-</div>
-<div style="margin-top:18px; display:flex; gap:10px;">
-  <button onclick="testGasConnection()" style="flex:1; padding:12px; background:#fff; border:1.5px solid #1b5e20; border-radius:12px; color:#1b5e20; font-size:0.9rem; cursor:pointer; font-family:inherit;">🔌 接続テスト</button>
-  <button onclick="saveGasSettings()" style="flex:1; padding:12px; background:#1b5e20; border:none; border-radius:12px; color:white; font-size:0.9rem; font-weight:700; cursor:pointer; font-family:inherit;">💾 設定を保存</button>
-</div>
-<div id="gasTestResult" style="margin-top:12px; font-size:0.85rem; display:none; padding:10px 12px; border-radius:8px;"></div>
-```
-
+    <div style="margin-top:18px; display:flex; gap:10px;">
+      <button onclick="testGasConnection()" style="flex:1; padding:12px; background:#fff; border:1.5px solid #1b5e20; border-radius:12px; color:#1b5e20; font-size:0.9rem; cursor:pointer; font-family:inherit;">🔌 接続テスト</button>
+      <button onclick="saveGasSettings()" style="flex:1; padding:12px; background:#1b5e20; border:none; border-radius:12px; color:white; font-size:0.9rem; font-weight:700; cursor:pointer; font-family:inherit;">💾 設定を保存</button>
+    </div>
+    <div id="gasTestResult" style="margin-top:12px; font-size:0.85rem; display:none; padding:10px 12px; border-radius:8px;"></div>
   </div>
 </div>
 
 <!-- スプレッドシート一括送信モーダル -->
-
 <div class="modal-overlay" id="gasBulkModal">
   <div class="modal-panel" style="max-width:540px;">
     <div class="modal-header">
@@ -1329,7 +1522,7 @@
         <div class="fg">
           <label class="lbl">
             ${item.name}
-            <span class="help-icon" onclick="event.stopPropagation(); showHelpPopup('${item.id}', 'decline')" title="クリックで詳しい解説を表示">？</span>
+            <span class="help-icon" onclick="event.stopPropagation(); showHelpPopup('${item.id}', 'decline')" title="クリックで詳しい解説を表示">?</span>
           </label>
           <div class="rgroup">
             ${[0,1,2,3,4].map(v => `<button class="rbtn" data-type="decline" data-id="${item.id}" data-val="${v}" onclick="setScore(this)">${v}<small>${item.desc[v]}</small></button>`).join('')}
@@ -1343,7 +1536,7 @@
         <div class="fg">
           <label class="lbl">
             ${item.name}
-            <span class="help-icon" onclick="event.stopPropagation(); showHelpPopup('${item.id}', 'health')" title="クリックで詳しい解説を表示">？</span>
+            <span class="help-icon" onclick="event.stopPropagation(); showHelpPopup('${item.id}', 'health')" title="クリックで詳しい解説を表示">?</span>
           </label>
           <div class="rgroup">
             ${item.grades.map((g, i) => {
@@ -1518,8 +1711,10 @@
     try { localStorage.setItem('treeRecords', JSON.stringify(records)); }
     catch(e) { alert('⚠️ テキストデータの保存に失敗しました。'); return; }
     if (records.length > 0 && records.length % 50 === 0) { setTimeout(() => alert(`📦 ${records.length}件に達しました！`), 500); }
+    // 匿名統計データ送信（同意済みの場合のみ）
+    sendAnonymousData(dataForLS);
     alert('✅ 保存しました');
-    updateAllMapMarkers(); resetForm(); updateEditModeUI(); renderRecordsList(); showTab('records');
+    updateAllMapMarkers(); resetForm(); updateEditModeUI(); renderRecordsList(); populateInferenceSelect(); showTab('records');
   };
 
   window.resetForm = function() {
@@ -1550,7 +1745,216 @@
     return toKey(a.treeNo).localeCompare(toKey(b.treeNo));
   }
 
-  function renderRecordsList() {
+  // ===== 初回同意ダイアログ =====
+  function checkConsent() {
+    const consent = localStorage.getItem('dbConsent');
+    if (consent === null) {
+      document.getElementById('consentModal').classList.add('open');
+    }
+  }
+
+  window.giveConsent = (agreed) => {
+    localStorage.setItem('dbConsent', agreed ? 'yes' : 'no');
+    localStorage.setItem('dbConsentDate', new Date().toISOString());
+    document.getElementById('consentModal').classList.remove('open');
+    if (agreed) {
+      console.log('[DB] データ提供に同意しました');
+    }
+  };
+
+  // 匿名統計データ送信（同意済みの場合のみ、保存時に呼ばれる）
+  function sendAnonymousData(r, includeFullInference = false) {
+    if (localStorage.getItem('dbConsent') !== 'yes') return;
+    const gasSettings = loadGasSettings();
+    if (!gasSettings.url || !gasSettings.token) return;
+
+    const inf = r.inference || {};
+
+    // 推論の自由記述（任意提供の場合のみ含める）
+    const inferenceDetail = includeFullInference ? {
+      evidence:     inf.evidence     || '',
+      differential: inf.differential || '',
+      treatDetail:  inf.treatDetail  || '',
+      priorityNote: inf.priorityNote || '',
+      nextFocus:    inf.nextFocus    || '',
+    } : {};
+
+    const anonData = {
+      token:  gasSettings.token,
+      action: 'anonymousStats',
+      data: {
+        // 点検データ
+        species:     r.species  || '',
+        overall:     r.overall  || '',
+        avg:         r.avg !== undefined ? Number(r.avg).toFixed(2) : '',
+        healthWorst: getHealthWorst(r.health),
+        fungus:      (r.fungus || []).filter(Boolean),
+        measures:    r.measures || [],
+        scores:      r.scores   || {},
+        health:      r.health   || {},
+        prefecture:  r.location ? r.location.replace(/[都道府県].*/, m => m[0]).replace(/市.*|町.*|村.*|区.*/, '') : '',
+        surveyYear:  r.surveyDate ? r.surveyDate.substring(0, 4) : '',
+        // 推論選択肢データ（選択式のみ・常に収集）
+        inf_mainCause:   inf.mainCause   || '',
+        inf_treatments:  inf.treatments  || [],
+        inf_priority:    inf.priority    || '',
+        inf_nextCheck:   inf.nextCheck   || '',
+        // 推論自由記述（任意提供時のみ）
+        inf_hasDetail:   includeFullInference,
+        ...inferenceDetail,
+      }
+    };
+
+    fetch(gasSettings.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(anonData),
+      redirect: 'follow'
+    }).catch(() => {});
+  }
+
+  // ===== 推論入力タブ =====
+  function populateInferenceSelect() {
+    const sel = document.getElementById('infTreeSelect');
+    const current = sel.value;
+    const sorted = [...records].filter(r => r?.id).sort((a,b) => naturalSortNo(a,b));
+    sel.innerHTML = '<option value="">— 樹木を選択 —</option>' +
+      sorted.map(r => `<option value="${r.id}" ${r.id===current?'selected':''}>${r.treeNo||r.id}　${r.species||''}　判定:${r.overall||'-'}</option>`).join('');
+  }
+
+  window.loadInferenceData = () => {
+    const id = document.getElementById('infTreeSelect').value;
+    const areas = ['infFormArea','infCauseArea','infTreatArea','infPriorityArea','infNextArea','infSaveArea'];
+    if (!id) {
+      document.getElementById('infSelectedInfo').style.display = 'none';
+      areas.forEach(a => document.getElementById(a).style.display = 'none');
+      return;
+    }
+    const r = records.find(rec => rec.id === id);
+    if (!r) return;
+
+    // 選択中の樹木情報を表示
+    const info = document.getElementById('infSelectedInfo');
+    info.style.display = 'block';
+    info.innerHTML = `
+      <strong>${r.treeNo||''} ${r.species||''}</strong>　📍${r.location||''}　📅${r.surveyDate||''}<br>
+      活力度：<strong>${r.avg!==undefined?Number(r.avg).toFixed(2):'-'}</strong>　
+      健全度最悪：<strong>${getHealthWorst(r.health)||'-'}</strong>　
+      総合判定：<span class="grade-badge grade-${r.overall||''}" style="display:inline-block;padding:2px 10px;">${r.overall||'-'}</span>
+    `;
+
+    areas.forEach(a => document.getElementById(a).style.display = 'block');
+
+    // データ提供同意済みの場合のみAI学習提供チェックを表示
+    const contributeArea = document.getElementById('infContributeArea');
+    contributeArea.style.display = localStorage.getItem('dbConsent') === 'yes' ? 'block' : 'none';
+
+    // 保存済み推論データがあれば復元
+    const inf = r.inference || {};
+    document.getElementById('infEvidence').value        = inf.evidence      || '';
+    document.getElementById('infMainCauseOther').value  = inf.mainCauseOther|| '';
+    document.getElementById('infDifferential').value    = inf.differential  || '';
+    document.getElementById('infTreatDetail').value     = inf.treatDetail   || '';
+    document.getElementById('infPriorityNote').value    = inf.priorityNote  || '';
+    document.getElementById('infNextCheck').value       = inf.nextCheck     || '';
+    document.getElementById('infNextFocus').value       = inf.nextFocus     || '';
+    document.getElementById('infNextNote').value        = inf.nextNote      || '';
+
+    // ラジオ・チェックボックス復元
+    document.querySelectorAll('input[name="infMainCause"]').forEach(el => {
+      el.checked = el.value === (inf.mainCause || '');
+    });
+    document.querySelectorAll('input[name="infPriority"]').forEach(el => {
+      el.checked = el.value === (inf.priority || '');
+    });
+    document.querySelectorAll('.inf-treat').forEach(el => {
+      el.checked = (inf.treatments || []).includes(el.value);
+    });
+  };
+
+  window.saveInference = () => {
+    const id = document.getElementById('infTreeSelect').value;
+    if (!id) { alert('樹木を選択してください'); return; }
+    const idx = records.findIndex(r => r.id === id);
+    if (idx === -1) return;
+
+    const mainCause = document.querySelector('input[name="infMainCause"]:checked')?.value || '';
+    const priority  = document.querySelector('input[name="infPriority"]:checked')?.value  || '';
+    const treatments= [...document.querySelectorAll('.inf-treat:checked')].map(el => el.value);
+
+    records[idx].inference = {
+      evidence:       document.getElementById('infEvidence').value,
+      mainCause,
+      mainCauseOther: document.getElementById('infMainCauseOther').value,
+      differential:   document.getElementById('infDifferential').value,
+      treatments,
+      treatDetail:    document.getElementById('infTreatDetail').value,
+      priority,
+      priorityNote:   document.getElementById('infPriorityNote').value,
+      nextCheck:      document.getElementById('infNextCheck').value,
+      nextFocus:      document.getElementById('infNextFocus').value,
+      nextNote:       document.getElementById('infNextNote').value,
+      updatedAt:      new Date().toISOString(),
+    };
+
+    localStorage.setItem('treeRecords', JSON.stringify(records));
+
+    // 推論データの匿名送信
+    const includeDetail = document.getElementById('infContribute')?.checked || false;
+    sendAnonymousData(records[idx], includeDetail);
+
+    // チェックを外す（次回保存時に意図的に再選択させるため）
+    const cb = document.getElementById('infContribute');
+    if (cb) cb.checked = false;
+
+    alert(`✅ ${records[idx].treeNo||''} の推論データを保存しました`);
+  };
+
+  window.clearInferenceForm = () => {
+    document.getElementById('infTreeSelect').value = '';
+    loadInferenceData();
+  };
+
+  window.exportInferenceToText = () => {
+    const id = document.getElementById('infTreeSelect').value;
+    if (!id) { alert('樹木を選択してください'); return; }
+    const r = records.find(rec => rec.id === id);
+    if (!r || !r.inference) { alert('推論データがありません'); return; }
+    const inf = r.inference;
+    const lines = [
+      `■ 推論診断書`,
+      `樹木No：${r.treeNo||''}　樹種：${r.species||''}　場所：${r.location||''}`,
+      `調査日：${r.surveyDate||''}　総合判定：${r.overall||''}`,
+      ``,
+      `【診断根拠・観察事実】`,
+      inf.evidence || '（記録なし）',
+      ``,
+      `【主因】${inf.mainCause||''}　${inf.mainCauseOther||''}`,
+      `【鑑別診断】`,
+      inf.differential || '（記録なし）',
+      ``,
+      `【推奨処置】${(inf.treatments||[]).join('、')}`,
+      inf.treatDetail || '',
+      ``,
+      `【緊急度・優先度】${inf.priority||''}`,
+      inf.priorityNote || '',
+      ``,
+      `【次回点検】${inf.nextCheck||''}　確認項目：${inf.nextFocus||''}`,
+      inf.nextNote || '',
+    ].join('\n');
+
+    const blob = new Blob([lines], { type: 'text/plain;charset=utf-8' });
+    dlBlob(blob, `推論_${r.treeNo||r.id}_${r.surveyDate||''}.txt`);
+  };
+
+  function getHealthWorst(health) {
+    if (!health) return '';
+    const ord = {A:0,B:1,C:2,D:3}; let worst = '';
+    Object.values(health).forEach(g => { if(g && ord[g]!==undefined){ if(!worst||ord[g]>ord[worst]) worst=g; } });
+    return worst;
+  }
+
+
     const valid=records.filter(r=>r?.id);
     const q=document.getElementById('searchInput').value.toLowerCase();
     let f=valid.filter(r=>(r.species||'').toLowerCase().includes(q)||(r.location||'').toLowerCase().includes(q)||(r.inspector||'').toLowerCase().includes(q)||(r.treeNo||'').toLowerCase().includes(q));
@@ -2289,7 +2693,7 @@ ${wpts}
   window.openGasSettings = () => {
     const s = loadGasSettings();
     document.getElementById('gasUrl').value = s.url || '';
-    document.getElementById('gasToken').value = s.token || 'tree_inspect_2024';
+    document.getElementById('gasToken').value = s.token || 'tree_inspect_2026';
     document.getElementById('gasSenderName').value = s.senderName || '';
     document.getElementById('gasDriveEnabled').checked = s.driveEnabled || false;
     document.getElementById('gasDriveFolderId').value = s.driveFolderId || '';
@@ -2310,15 +2714,19 @@ ${wpts}
     const senderName = document.getElementById('gasSenderName').value.trim();
     const driveEnabled = document.getElementById('gasDriveEnabled').checked;
     const driveFolderId = document.getElementById('gasDriveFolderId').value.trim();
+    // DriveフォルダにURLが貼られた場合、IDだけを自動抽出
+    const folderMatch = driveFolderId.match(/folders\/([A-Za-z0-9_-]+)/);
+    const cleanFolderId = folderMatch ? folderMatch[1] : driveFolderId;
+    if (folderMatch) document.getElementById('gasDriveFolderId').value = cleanFolderId;
     if (!url || !token) { alert('URLとアクセストークンは必須です'); return; }
-    saveGasSettingsData({ url, token, senderName, driveEnabled, driveFolderId });
+    saveGasSettingsData({ url, token, senderName, driveEnabled, driveFolderId: cleanFolderId });
     alert('✅ 設定を保存しました'); closeGasSettings();
   };
   window.testGasConnection = async () => {
     const url=document.getElementById('gasUrl').value.trim(), result=document.getElementById('gasTestResult');
     result.style.display='block'; result.style.background='#fff8e1'; result.textContent='🔌 接続テスト中...';
     if(!url){result.style.background='#ffebee';result.textContent='❌ URLを入力してください';return;}
-    try{const res=await fetch(url,{method:'GET'});const data=await res.json();if(data.status==='ok'){result.style.background='#e8f5e9';result.textContent=`✅ 接続成功！（${data.message}）`;}else{result.style.background='#ffebee';result.textContent=`⚠️ レスポンス異常: ${JSON.stringify(data)}`;}}
+    try{const token=document.getElementById('gasToken').value.trim();const res=await fetch(url+'?token='+encodeURIComponent(token),{method:'GET'});const data=await res.json();if(data.status==='ok'){result.style.background='#e8f5e9';result.textContent=`✅ 接続成功！（${data.message}）`;}else{result.style.background='#ffebee';result.textContent=`⚠️ レスポンス異常: ${JSON.stringify(data)}`;}}
     catch(e){result.style.background='#ffebee';result.innerHTML=`❌ 接続失敗: ${e.message}`;}
   };
 
@@ -2327,9 +2735,18 @@ ${wpts}
       token: settings.token, action: 'upsert', senderName: settings.senderName||'',
       records: [{ id:r.id, treeNo:r.treeNo, surveyDate:r.surveyDate, weather:r.weather, inspector:r.inspector, species:r.species, family:r.family, scientificName:r.scientificName, location:r.location, treeHeight:r.treeHeight, trunkGirth:r.trunkGirth, latitude:r.latitude, longitude:r.longitude, overall:r.overall, scores:r.scores||{}, health:r.health||{}, fungus:r.fungus||[], fungusOther:r.fungusOther||'', comment:r.comment||'', measures:r.measures||[], avg:r.avg, senderName:settings.senderName||'' }]
     };
-    const res = await fetch(settings.url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
-    const data = await res.json();
-    if (!res.ok || data.status !== 'ok') throw new Error(data.message || `HTTP ${res.status}`);
+    const res = await fetch(settings.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
+    });
+    // GASはリダイレクト後にテキストで返すことがあるため安全にパース
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch { throw new Error(`レスポンス解析失敗: ${text.substring(0, 80)}`); }
+    if (data.status !== 'ok') throw new Error(data.message || `エラー: ${JSON.stringify(data)}`);
 
     // 写真送信（Drive保存）
     if (withPhotos && settings.driveEnabled) {
@@ -2340,18 +2757,21 @@ ${wpts}
           if (!match) continue;
           const ext = match[1] === 'jpeg' ? 'jpg' : match[1];
           const photoPayload = {
-            token: settings.token,
-            action: 'savePhoto',
+            token: settings.token, action: 'savePhoto',
             treeNo: r.treeNo || r.id,
             fileName: `${(r.treeNo||r.id).replace(/[\\/:*?"<>|]/g,'_')}_${String(i+1).padStart(2,'0')}.${ext}`,
-            mimeType: `image/${match[1]}`,
-            base64: match[2],
-            surveyDate: r.surveyDate || '',
-            species: r.species || '',
+            mimeType: `image/${match[1]}`, base64: match[2],
+            surveyDate: r.surveyDate||'', species: r.species||'',
           };
-          const pRes = await fetch(settings.url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(photoPayload)});
-          const pData = await pRes.json();
-          if (!pRes.ok || pData.status !== 'ok') console.warn(`写真${i+1}の送信失敗:`, pData.message);
+          const pRes = await fetch(settings.url, {
+            method: 'POST', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(photoPayload), redirect: 'follow'
+          });
+          const pText = await pRes.text();
+          try {
+            const pData = JSON.parse(pText);
+            if (pData.status !== 'ok') console.warn(`写真${i+1}送信失敗:`, pData.message);
+          } catch { console.warn(`写真${i+1}レスポンス解析失敗:`, pText.substring(0,60)); }
         }
       }
     }
@@ -2436,9 +2856,10 @@ ${wpts}
         document.getElementById('gasProgressBar').style.width = `${Math.round((Math.min(i + CHUNK, targets.length) / targets.length) * 100)}%`;
         try {
           const payload = { token:s.token, action:'upsert', senderName:s.senderName||'', records:chunk.map(r=>({id:r.id,treeNo:r.treeNo,surveyDate:r.surveyDate,weather:r.weather,inspector:r.inspector,species:r.species,family:r.family,scientificName:r.scientificName,location:r.location,treeHeight:r.treeHeight,trunkGirth:r.trunkGirth,latitude:r.latitude,longitude:r.longitude,overall:r.overall,scores:r.scores||{},health:r.health||{},fungus:r.fungus||[],fungusOther:r.fungusOther||'',comment:r.comment||'',measures:r.measures||[],avg:r.avg,senderName:s.senderName||''})) };
-          const res = await fetch(s.url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data = await res.json(); if (data.status !== 'ok') throw new Error(data.message || '送信エラー');
+          const res = await fetch(s.url, {method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload), redirect:'follow'});
+          const text = await res.text();
+          let data; try { data = JSON.parse(text); } catch { throw new Error(`レスポンス解析失敗: ${text.substring(0,60)}`); }
+          if (data.status !== 'ok') throw new Error(data.message || '送信エラー');
           chunk.forEach(r => { const idx = records.findIndex(rec => rec.id === r.id); if (idx !== -1) { records[idx]._sentToGAS = true; records[idx]._sentToGASAt = new Date().toISOString(); } });
           success += chunk.length;
           await new Promise(res => setTimeout(res, 500));
@@ -2510,6 +2931,7 @@ ${wpts}
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
     if(tab==='records')renderRecordsList();
+    if(tab==='inference')populateInferenceSelect();
     if(tab==='allmap'){setTimeout(()=>{if(!allMap)initAllMap();else{allMap.invalidateSize();updateAllMapMarkers();}},100);}
   }
   window.showTab = showTab;
@@ -2523,6 +2945,9 @@ ${wpts}
     document.getElementById('searchInput').addEventListener('input',renderRecordsList);
     document.getElementById('sortSelect').addEventListener('change',renderRecordsList);
     renderPhotos(); updateOverall(); updateEditModeUI(); updatePhotoCounter();
+    populateInferenceSelect();
+    // 初回起動時のみ同意ダイアログを表示
+    setTimeout(checkConsent, 800);
   }
   init();
 })();
@@ -2537,6 +2962,11 @@ ${wpts}
     navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
   }
 </script>
+
+<footer style="text-align:center; padding:18px 16px 24px; color:#999; font-size:0.72rem; line-height:1.8; border-top:1px solid #e8e8e8; margin-top:16px;">
+  © 2026 Koh Kitsukawa. All rights reserved.<br>
+  本システムの無断複製・転載・商用利用を禁じます。
+</footer>
 
 </body>
 </html>
