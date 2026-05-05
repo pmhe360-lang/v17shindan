@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>樹木診断・点検システム（26.8）</title>
+  <title>樹木診断・点検システム（26.7）</title>
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -165,7 +165,10 @@
 
 <header class="hdr">
   <h1>樹木点検・診断システム</h1>
-  <div style="font-size:0.9rem;">26.8（推論入力タブ追加・データベース化）</div>
+  <div style="font-size:0.9rem;">26.8（推論入力タブ追加・データベース化対応）</div>
+  <div style="margin-top:6px;">
+    <button id="activeProjBadge" onclick="openProjectModal()" style="display:inline-block;padding:4px 12px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);border-radius:20px;color:white;font-size:0.78rem;cursor:pointer;font-family:inherit;">📋 案件未設定（全項目）</button>
+  </div>
   <div style="font-size:0.72rem; color:rgba(255,255,255,0.8); margin-top:4px; line-height:1.4;">
     ※診断結果は参考になります。専門家(樹木医等)の判断を併せてご検討ください。
   </div>
@@ -492,6 +495,9 @@
       <div class="card-body">
         <div class="search-bar">
           <input type="text" class="inp" id="searchInput" placeholder="樹種・場所・点検者で検索">
+          <select class="inp" id="projectFilter" onchange="renderRecordsList()" style="max-width:120px;font-size:0.82rem;">
+            <option value="">全案件</option>
+          </select>
           <select class="inp" id="sortSelect" onchange="renderRecordsList()">
             <option value="no-asc">樹木No（昇順）</option>
             <option value="no-desc">樹木No（降順）</option>
@@ -547,7 +553,8 @@
       <div style="background:#f0f6ff; border:1.5px solid #90caf9; border-radius:14px; padding:10px 12px;">
         <div style="font-size:0.75rem; font-weight:700; color:#0d47a1; margin-bottom:8px; letter-spacing:0.04em;">📡 送信・共有</div>
         <div style="display:flex; flex-wrap:wrap; gap:7px;">
-          <button class="btn-sec" onclick="openMailModal()" style="background:#e3f2fd; border-color:#1565c0; color:#1565c0;">📧 メール送信</button>
+          <button class="btn-sec" onclick="openProjectModal()" style="background:#e8f3df; border-color:#2d5016; color:#2d5016;">📋 案件管理</button>
+      <button class="btn-sec" onclick="openMailModal()" style="background:#e3f2fd; border-color:#1565c0; color:#1565c0;">📧 メール送信</button>
           <button class="btn-sec" onclick="openGasBulkModal()" style="background:#e8f5e9; border-color:#1b5e20; color:#1b5e20;">📊 スプレッドシート送信</button>
           <button class="btn-sec" onclick="openGasSettings()" style="background:#f1f8e9; border-color:#558b2f; color:#33691e;">⚙️ SS設定</button>
         </div>
@@ -1556,7 +1563,7 @@
     const dCont = document.getElementById('decline-items');
     if (dCont) {
       dCont.innerHTML = declineItems.map(item => `
-        <div class="fg">
+        <div class="fg" data-decline-item="${item.id}">
           <label class="lbl">
             ${item.name}
             <span class="help-icon" onclick="event.stopPropagation(); showHelpPopup('${item.id}', 'decline')" title="クリックで詳しい解説を表示">?</span>
@@ -1570,7 +1577,7 @@
     const hCont = document.getElementById('health-items');
     if (hCont) {
       hCont.innerHTML = healthItems.map(item => `
-        <div class="fg">
+        <div class="fg" data-health-item="${item.id}">
           <label class="lbl">
             ${item.name}
             <span class="help-icon" onclick="event.stopPropagation(); showHelpPopup('${item.id}', 'health')" title="クリックで詳しい解説を表示">?</span>
@@ -1604,7 +1611,14 @@
     updateOverall();
   };
 
-  function calcDeclineAvg() { let sum=0, cnt=0; declineItems.forEach(i=>{ if(scores[i.id]!==undefined){ sum+=scores[i.id]; cnt++; } }); return cnt? sum/cnt : 0; }
+  function calcDeclineAvg() {
+    const enabledIds = (typeof getEnabledScoreIds === 'function') ? getEnabledScoreIds() : declineItems.map(i=>i.id);
+    let sum=0, cnt=0;
+    declineItems.forEach(i=>{
+      if(enabledIds.includes(i.id) && scores[i.id]!==undefined){ sum+=scores[i.id]; cnt++; }
+    });
+    return cnt? sum/cnt : 0;
+  }
   function worstHealth() { const order = {A:0,B:1,C:2,D:3}; let worst='A'; healthItems.forEach(i=>{ const g=healthGrades[i.id]; if(g && order[g]>order[worst]) worst=g; }); return worst; }
   function updateOverall() {
     const avg = calcDeclineAvg(), worst = worstHealth();
@@ -1692,6 +1706,7 @@
   function collectData() {
     return {
       id: editingId || Date.now()+'-'+Math.random().toString(36),
+      projectId: (() => { const d=loadProjects(); return d.activeId||''; })(),
       treeNo: document.getElementById('treeNo').value,
       surveyDate: document.getElementById('surveyDate').value,
       weather: document.getElementById('weather').value,
@@ -1992,9 +2007,18 @@
   }
 
   function renderRecordsList() {
+    const projFilterEl = document.getElementById('projectFilter');
+    if (projFilterEl) {
+      const pdata = loadProjects();
+      const cv = projFilterEl.value;
+      projFilterEl.innerHTML = '<option value="">全案件</option>' +
+        pdata.projects.map(p => `<option value="${p.id}" ${p.id===cv?'selected':''}>${p.name}</option>`).join('');
+      projFilterEl.value = cv;
+    }
+    const projId = projFilterEl ? projFilterEl.value : '';
     const valid=records.filter(r=>r?.id);
     const q=document.getElementById('searchInput').value.toLowerCase();
-    let f=valid.filter(r=>(r.species||'').toLowerCase().includes(q)||(r.location||'').toLowerCase().includes(q)||(r.inspector||'').toLowerCase().includes(q)||(r.treeNo||'').toLowerCase().includes(q));
+    let f=valid.filter(r=>(!projId || r.projectId === projId) && ((r.species||'').toLowerCase().includes(q)||(r.location||'').toLowerCase().includes(q)||(r.inspector||'').toLowerCase().includes(q)||(r.treeNo||'').toLowerCase().includes(q)));
     const s=document.getElementById('sortSelect').value;
     if(s==='no-asc')  f.sort((a,b)=> naturalSortNo(a,b));
     else if(s==='no-desc')  f.sort((a,b)=> naturalSortNo(b,a));
@@ -2983,8 +3007,174 @@ ${wpts}
     populateInferenceSelect();
     // 初回起動時のみ同意ダイアログを表示
     setTimeout(checkConsent, 800);
+    if(typeof applyProjectProfile === 'function') applyProjectProfile();
   }
   init();
+
+  // ==============================
+  // レベル2: 案件プロファイル機能
+  // ==============================
+  const PROJECT_KEY = 'treeInspect_projects';
+  const ALL_SCORE_IDS = ['vigor','shape','density','shoot','leafSize','leafColor','topDieback','lowerDieback','largeBranch','pruning','barkWound','barkTurnover','sprout','bud','autumnColor','flower','fruit'];
+  const ALL_HEALTH_IDS = ['sway','lean','crack','fungusBody','cavity','bulge','decayExposed','barkDamage','jointAbnormality','pestDamage','rootVisible','tappingSound','penetrationAbnormality','hangingBranch'];
+
+  function loadProjects() {
+    try { return JSON.parse(localStorage.getItem(PROJECT_KEY) || '{"projects":[],"activeId":null}'); }
+    catch { return { projects: [], activeId: null }; }
+  }
+  function saveProjects(obj) { localStorage.setItem(PROJECT_KEY, JSON.stringify(obj)); }
+  function getActiveProject() {
+    const data = loadProjects();
+    if (!data.activeId) return null;
+    return data.projects.find(p => p.id === data.activeId) || null;
+  }
+  function getEnabledScoreIds() {
+    const p = getActiveProject();
+    if (!p) return ALL_SCORE_IDS;
+    if (!p.enableVitality) return [];
+    return p.enabledScores || ALL_SCORE_IDS;
+  }
+  function getEnabledHealthIds() {
+    const p = getActiveProject();
+    if (!p) return ALL_HEALTH_IDS;
+    if (!p.enableHealth) return [];
+    return p.enabledHealth || ALL_HEALTH_IDS;
+  }
+  function applyProjectProfile() {
+    const enabledScores = getEnabledScoreIds();
+    const enabledHealth = getEnabledHealthIds();
+    document.querySelectorAll('[data-decline-item]').forEach(el => {
+      el.style.display = enabledScores.includes(el.dataset.declineItem) ? '' : 'none';
+    });
+    document.querySelectorAll('[data-health-item]').forEach(el => {
+      el.style.display = enabledHealth.includes(el.dataset.healthItem) ? '' : 'none';
+    });
+    updateProjectBadge();
+  }
+  function updateProjectBadge() {
+    const p = getActiveProject();
+    const badge = document.getElementById('activeProjBadge');
+    if (!badge) return;
+    if (p) {
+      badge.textContent = '📋 ' + p.name;
+      badge.style.opacity = '1';
+    } else {
+      badge.textContent = '📋 案件未設定（全項目）';
+      badge.style.opacity = '0.7';
+    }
+  }
+  window.openProjectModal = function() {
+    renderProjectList();
+    updateProjActiveDisplay();
+    document.getElementById('projectModal').classList.add('open');
+  };
+  window.closeProjectModal = function() {
+    document.getElementById('projectModal').classList.remove('open');
+  };
+  function updateProjActiveDisplay() {
+    const p = getActiveProject();
+    const el = document.getElementById('projActiveDisplay');
+    if (el) el.textContent = p ? '使用中: ' + p.name : '案件未設定（全31項目で評価）';
+  }
+  function renderProjectList() {
+    const data = loadProjects();
+    const list = document.getElementById('projectList');
+    if (!list) return;
+    if (!data.projects.length) {
+      list.innerHTML = '<p style="color:#888;font-size:0.85rem;text-align:center;padding:20px;">案件がありません<br>下の「新規作成」から追加してください</p>';
+      return;
+    }
+    list.innerHTML = data.projects.map(p => {
+      const isActive = p.id === data.activeId;
+      const sc = p.enableVitality ? (p.enabledScores||[]).length : 0;
+      const hc = p.enableHealth ? (p.enabledHealth||[]).length : 0;
+      return `<div style="border:2px solid ${isActive?'#4a7c2f':'#ddd'};border-radius:14px;padding:12px 14px;margin-bottom:10px;background:${isActive?'#f0f7ea':'white'};">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div style="font-weight:700;font-size:0.95rem;color:${isActive?'#2d5016':'#333'};flex:1;">${p.name}${isActive?' <span style="font-size:0.7rem;background:#4a7c2f;color:white;padding:1px 7px;border-radius:10px;">使用中</span>':''}</div>
+        </div>
+        <div style="font-size:0.78rem;color:#777;margin-bottom:10px;">活力度：${p.enableVitality?sc+'項目':'❌ 無効'}　健全度：${p.enableHealth?hc+'項目':'❌ 無効'}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button onclick="activateProject('${p.id}')" style="padding:6px 14px;background:${isActive?'#e0e0e0':'#2d5016'};color:${isActive?'#888':'white'};border:none;border-radius:20px;font-size:0.82rem;cursor:pointer;">${isActive?'✅ 使用中':'▶ この案件を使用'}</button>
+          <button onclick="editProject('${p.id}')" style="padding:6px 14px;background:#e3f2fd;color:#1565c0;border:1px solid #90caf9;border-radius:20px;font-size:0.82rem;cursor:pointer;">✏️ 編集</button>
+          <button onclick="deleteProject('${p.id}')" style="padding:6px 14px;background:#ffcdd2;color:#b71c1c;border:1px solid #ef9a9a;border-radius:20px;font-size:0.82rem;cursor:pointer;">🗑️ 削除</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  window.activateProject = function(id) {
+    const data = loadProjects();
+    data.activeId = (data.activeId === id) ? null : id;
+    saveProjects(data); renderProjectList(); updateProjActiveDisplay(); applyProjectProfile();
+  };
+  window.deleteProject = function(id) {
+    if (!confirm('この案件を削除しますか？')) return;
+    const data = loadProjects();
+    data.projects = data.projects.filter(p => p.id !== id);
+    if (data.activeId === id) data.activeId = null;
+    saveProjects(data); renderProjectList(); applyProjectProfile();
+  };
+  window.showNewProjectForm = function() {
+    document.getElementById('projEditArea').style.display = 'block';
+    document.getElementById('projEditTitle').textContent = '新規案件作成';
+    document.getElementById('projEditId').value = '';
+    document.getElementById('projName').value = '';
+    ['projEnableVitality','projEnableHealth','projEnableFungus','projEnableInference'].forEach(id=>document.getElementById(id).checked=true);
+    ALL_SCORE_IDS.forEach(id=>{const cb=document.getElementById('ps_'+id);if(cb)cb.checked=true;});
+    ALL_HEALTH_IDS.forEach(id=>{const cb=document.getElementById('ph_'+id);if(cb)cb.checked=true;});
+    updateProjScoreSection(); updateProjHealthSection();
+    document.getElementById('projEditArea').scrollIntoView({behavior:'smooth'});
+  };
+  window.editProject = function(id) {
+    const data = loadProjects();
+    const p = data.projects.find(p => p.id === id); if(!p)return;
+    document.getElementById('projEditArea').style.display = 'block';
+    document.getElementById('projEditTitle').textContent = '案件を編集';
+    document.getElementById('projEditId').value = p.id;
+    document.getElementById('projName').value = p.name;
+    document.getElementById('projEnableVitality').checked = p.enableVitality !== false;
+    document.getElementById('projEnableHealth').checked = p.enableHealth !== false;
+    document.getElementById('projEnableFungus').checked = p.enableFungus !== false;
+    document.getElementById('projEnableInference').checked = p.enableInference !== false;
+    ALL_SCORE_IDS.forEach(id=>{const cb=document.getElementById('ps_'+id);if(cb)cb.checked=(p.enabledScores||ALL_SCORE_IDS).includes(id);});
+    ALL_HEALTH_IDS.forEach(id=>{const cb=document.getElementById('ph_'+id);if(cb)cb.checked=(p.enabledHealth||ALL_HEALTH_IDS).includes(id);});
+    updateProjScoreSection(); updateProjHealthSection();
+    document.getElementById('projEditArea').scrollIntoView({behavior:'smooth'});
+  };
+  window.updateProjScoreSection = function() {
+    document.getElementById('projScoreItems').style.display = document.getElementById('projEnableVitality').checked ? 'block' : 'none';
+  };
+  window.updateProjHealthSection = function() {
+    document.getElementById('projHealthItems').style.display = document.getElementById('projEnableHealth').checked ? 'block' : 'none';
+  };
+  window.saveProjectEdit = function() {
+    const name = document.getElementById('projName').value.trim();
+    if (!name) { alert('案件名を入力してください'); return; }
+    const id = document.getElementById('projEditId').value || (Date.now()+'-'+Math.random().toString(36).slice(2));
+    const enableVitality = document.getElementById('projEnableVitality').checked;
+    const enableHealth = document.getElementById('projEnableHealth').checked;
+    const project = {
+      id, name, enableVitality, enableHealth,
+      enabledScores: enableVitality ? ALL_SCORE_IDS.filter(sid=>document.getElementById('ps_'+sid)?.checked) : [],
+      enabledHealth: enableHealth ? ALL_HEALTH_IDS.filter(sid=>document.getElementById('ph_'+sid)?.checked) : [],
+      enableFungus: document.getElementById('projEnableFungus').checked,
+      enableInference: document.getElementById('projEnableInference').checked,
+      updatedAt: new Date().toISOString()
+    };
+    const data = loadProjects();
+    const idx = data.projects.findIndex(p => p.id === id);
+    if (idx >= 0) data.projects[idx] = project; else data.projects.push(project);
+    saveProjects(data);
+    document.getElementById('projEditArea').style.display = 'none';
+    renderProjectList(); alert('✅ 案件「'+name+'」を保存しました');
+  };
+  window.cancelProjectEdit = function() { document.getElementById('projEditArea').style.display = 'none'; };
+  window.projScoreSelectAll = function(v) { ALL_SCORE_IDS.forEach(id=>{const cb=document.getElementById('ps_'+id);if(cb)cb.checked=v;}); };
+  window.projHealthSelectAll = function(v) { ALL_HEALTH_IDS.forEach(id=>{const cb=document.getElementById('ph_'+id);if(cb)cb.checked=v;}); };
+  window.clearActiveProject = function() {
+    const data = loadProjects(); data.activeId = null; saveProjects(data);
+    renderProjectList(); updateProjActiveDisplay(); applyProjectProfile();
+  };
+
 })();
 </script>
 
@@ -3002,6 +3192,97 @@ ${wpts}
   © 2026 Koh Kitsukawa. All rights reserved.<br>
   本システムの無断複製・転載・商用利用を禁じます。
 </footer>
+
+<!-- ===== 案件管理モーダル ===== -->
+
+<div class="modal-overlay" id="projectModal">
+  <div class="modal-panel" style="max-width:560px;">
+    <div class="modal-header">
+      <h2 style="color:#2d5016;">📋 案件プロファイル管理</h2>
+      <button class="modal-close-btn" onclick="closeProjectModal()">✕</button>
+    </div>
+    <div style="background:#f0f7ea;border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:0.83rem;color:#2d5016;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <div id="projActiveDisplay">案件未設定（全31項目で評価）</div>
+      <button onclick="clearActiveProject()" style="padding:5px 12px;background:white;border:1.5px solid #4a7c2f;border-radius:20px;font-size:0.78rem;color:#2d5016;cursor:pointer;white-space:nowrap;">全項目に戻す</button>
+    </div>
+    <div id="projectList" style="max-height:280px;overflow-y:auto;margin-bottom:14px;"></div>
+    <button onclick="showNewProjectForm()" style="width:100%;padding:12px;background:#2d5016;border:none;border-radius:12px;color:white;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:inherit;margin-bottom:14px;">＋ 新しい案件を作成</button>
+    <div id="projEditArea" style="display:none;background:#fafafa;border:1.5px solid #ddd;border-radius:14px;padding:16px;">
+      <h3 id="projEditTitle" style="font-size:0.95rem;color:#2d5016;margin-bottom:14px;"></h3>
+      <input type="hidden" id="projEditId">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:0.85rem;font-weight:700;color:#333;display:block;margin-bottom:6px;">案件名 <span style="color:#c62828;">*</span></label>
+        <input type="text" id="projName" class="modal-input" placeholder="例：○○市街路樹診断2026">
+      </div>
+      <div style="margin-bottom:12px;background:#e8f3df;border-radius:10px;padding:10px 14px;">
+        <div style="font-size:0.82rem;font-weight:700;color:#2d5016;margin-bottom:8px;">使用するセクション</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;"><input type="checkbox" id="projEnableVitality" onchange="updateProjScoreSection()" style="width:16px;height:16px;"> 活力度（Ⅰ-2）</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;"><input type="checkbox" id="projEnableHealth" onchange="updateProjHealthSection()" style="width:16px;height:16px;"> 健全度（Ⅰ-3）</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;"><input type="checkbox" id="projEnableFungus" style="width:16px;height:16px;"> 腐朽菌記録</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;"><input type="checkbox" id="projEnableInference" style="width:16px;height:16px;"> 推論入力タブ</label>
+        </div>
+      </div>
+      <div id="projScoreItems" style="margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="font-size:0.82rem;font-weight:700;color:#333;">活力度：使用する項目</div>
+          <div style="display:flex;gap:6px;">
+            <button onclick="projScoreSelectAll(true)" style="font-size:0.72rem;padding:3px 8px;background:#e8f5e9;border:1px solid #4a7c2f;border-radius:12px;color:#2d5016;cursor:pointer;">全ON</button>
+            <button onclick="projScoreSelectAll(false)" style="font-size:0.72rem;padding:3px 8px;background:#f5f5f5;border:1px solid #bbb;border-radius:12px;color:#555;cursor:pointer;">全OFF</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;background:white;border:1.5px solid #eee;border-radius:10px;padding:10px;">
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_vigor" style="width:13px;height:13px;"> 樹勢</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_shape" style="width:13px;height:13px;"> 樹形</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_density" style="width:13px;height:13px;"> 枝葉密度</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_shoot" style="width:13px;height:13px;"> 枝伸長量</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_leafSize" style="width:13px;height:13px;"> 葉の大きさ</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_leafColor" style="width:13px;height:13px;"> 葉色</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_topDieback" style="width:13px;height:13px;"> 梢端枯損</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_lowerDieback" style="width:13px;height:13px;"> 下枝枯損</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_largeBranch" style="width:13px;height:13px;"> 大枝欠損</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_pruning" style="width:13px;height:13px;"> 剪定痕</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_barkWound" style="width:13px;height:13px;"> 樹皮傷</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_barkTurnover" style="width:13px;height:13px;"> 新陳代謝</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_sprout" style="width:13px;height:13px;"> 胴吹き</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_bud" style="width:13px;height:13px;"> 芽</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_autumnColor" style="width:13px;height:13px;"> 紅黄葉</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_flower" style="width:13px;height:13px;"> 開花</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#f8fdf4;border:1px solid #c8e6c9;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ps_fruit" style="width:13px;height:13px;"> 結実</label>
+        </div>
+      </div>
+      <div id="projHealthItems" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="font-size:0.82rem;font-weight:700;color:#333;">健全度：使用する項目</div>
+          <div style="display:flex;gap:6px;">
+            <button onclick="projHealthSelectAll(true)" style="font-size:0.72rem;padding:3px 8px;background:#fff3e0;border:1px solid #e65100;border-radius:12px;color:#e65100;cursor:pointer;">全ON</button>
+            <button onclick="projHealthSelectAll(false)" style="font-size:0.72rem;padding:3px 8px;background:#f5f5f5;border:1px solid #bbb;border-radius:12px;color:#555;cursor:pointer;">全OFF</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;background:white;border:1.5px solid #eee;border-radius:10px;padding:10px;">
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_sway" style="width:13px;height:13px;"> 揺らぎ</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_lean" style="width:13px;height:13px;"> 不自然な傾斜</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_crack" style="width:13px;height:13px;"> 亀裂</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_fungusBody" style="width:13px;height:13px;"> 子実体(キノコ)</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_cavity" style="width:13px;height:13px;"> 開口空洞</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_bulge" style="width:13px;height:13px;"> 隆起</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_decayExposed" style="width:13px;height:13px;"> 腐朽部露出</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_barkDamage" style="width:13px;height:13px;"> 樹皮枯死・欠損</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_jointAbnormality" style="width:13px;height:13px;"> 結合部の変状</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_pestDamage" style="width:13px;height:13px;"> 穿孔害虫等</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_rootVisible" style="width:13px;height:13px;"> 根張り</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_tappingSound" style="width:13px;height:13px;"> 打診音異常</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_penetrationAbnormality" style="width:13px;height:13px;"> 貫入異常</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;padding:3px 8px;background:#fff8f0;border:1px solid #ffcc80;border-radius:16px;cursor:pointer;"><input type="checkbox" id="ph_hangingBranch" style="width:13px;height:13px;"> ぶら下がり枝</label>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="saveProjectEdit()" style="flex:2;padding:12px;background:#2d5016;border:none;border-radius:12px;color:white;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:inherit;">💾 保存</button>
+        <button onclick="cancelProjectEdit()" style="flex:1;padding:12px;background:white;border:1.5px solid #ccc;border-radius:12px;color:#555;font-size:0.9rem;cursor:pointer;font-family:inherit;">キャンセル</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
