@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -355,26 +356,29 @@
     <p>現場のデータを事務所の<strong>Google スプレッドシート</strong>に送信できます。</p>
     <div class="note">⚠️ 事前にPCでのGAS設定が必要です。</div>
 
-    <div class="step-card">
-      <div class="step-head"><div class="step-num">1</div>Googleスプレッドシートを作成</div>
-      <div class="step-body"><p>Googleドライブで新規スプレッドシートを作成します。</p></div>
-    </div>
-    <div class="step-card">
-      <div class="step-head"><div class="step-num">2</div>Apps Scriptを設定</div>
-      <div class="step-body"><p>「拡張機能」→「Apps Script」→ 配布のコード（コード.gs）を貼り付けて保存。</p></div>
-    </div>
-    <div class="step-card">
-      <div class="step-head"><div class="step-num">3</div>ウェブアプリとしてデプロイ</div>
-      <div class="step-body"><p>「デプロイ」→「新しいデプロイ」→「ウェブアプリ」。アクセスは「全員」に設定。表示されたURLをコピー。</p></div>
-    </div>
-    <div class="step-card">
-      <div class="step-head"><div class="step-num">4</div>アプリにURLを設定</div>
-      <div class="step-body"><p>記録一覧タブの「⚙️ スプレッドシート設定」からURLとトークンを入力して保存。</p></div>
-    </div>
-    <div class="step-card">
-      <div class="step-head"><div class="step-num">5</div>データを送信</div>
-      <div class="step-body"><p>「📊 スプレッドシート一括送信」から全件・未送信・判定Dのみを選択して送信できます。各記録の「📊 SS」ボタンで1件ずつ送信も可能です。</p></div>
-    </div>
+```
+<div class="step-card">
+  <div class="step-head"><div class="step-num">1</div>Googleスプレッドシートを作成</div>
+  <div class="step-body"><p>Googleドライブで新規スプレッドシートを作成します。</p></div>
+</div>
+<div class="step-card">
+  <div class="step-head"><div class="step-num">2</div>Apps Scriptを設定</div>
+  <div class="step-body"><p>「拡張機能」→「Apps Script」→ 配布のコード（コード.gs）を貼り付けて保存。</p></div>
+</div>
+<div class="step-card">
+  <div class="step-head"><div class="step-num">3</div>ウェブアプリとしてデプロイ</div>
+  <div class="step-body"><p>「デプロイ」→「新しいデプロイ」→「ウェブアプリ」。アクセスは「全員」に設定。表示されたURLをコピー。</p></div>
+</div>
+<div class="step-card">
+  <div class="step-head"><div class="step-num">4</div>アプリにURLを設定</div>
+  <div class="step-body"><p>記録一覧タブの「⚙️ スプレッドシート設定」からURLとトークンを入力して保存。</p></div>
+</div>
+<div class="step-card">
+  <div class="step-head"><div class="step-num">5</div>データを送信</div>
+  <div class="step-body"><p>「📊 スプレッドシート一括送信」から全件・未送信・判定Dのみを選択して送信できます。各記録の「📊 SS」ボタンで1件ずつ送信も可能です。</p></div>
+</div>
+```
+
   </div>
 </section>
 
@@ -412,7 +416,60 @@
   </div>
 </section>
 
+```
+<div class="section" id="inference">
+  <h2>🔍 推論入力タブの使い方</h2>
+  <p>点検データを保存した後、樹木医としての診断推論（原因特定・治療方針・優先度）を記録するタブです。報告書の「診断推論」欄として活用できます。</p>
+
+  <h3>① 対象樹木の選択</h3>
+  <p>プルダウンから記録済みの樹木Noを選択します。保存済みの推論データがある場合は自動的に読み込まれます。</p>
+
+  <h3>② 診断根拠・観察事実</h3>
+  <p>活力度・健全度の評価に至った具体的な観察内容を記録します。<br>
+  例：「幹基部にベッコウタケの子実体を確認。打診音は空洞音。根張りが見えず、揺らぎあり。」</p>
+
+  <h3>③ 原因推定・鑑別診断</h3>
+  <p><strong>主因</strong>から最も疑われる原因を1つ選択します。「その他」を選んだ場合は自由記述欄に記入してください。<br>
+  <strong>鑑別診断</strong>には、除外した原因や要確認の事項を記録します。</p>
+  <table>
+    <tr><th>選択肢</th><th>主な症状・状況</th></tr>
+    <tr><td>腐朽（心材）</td><td>空洞・打診音異常・子実体</td></tr>
+    <tr><td>腐朽（根株）</td><td>揺らぎ・根元の隆起・貫入異常</td></tr>
+    <tr><td>根系障害（物理）</td><td>舗装・転圧による根域縮小</td></tr>
+    <tr><td>根系障害（土壌）</td><td>過湿・乾燥・通気不良</td></tr>
+    <tr><td>穿孔害虫</td><td>クビアカ等による穿孔・ヤニ・木屑</td></tr>
+    <tr><td>葉・枝の病害</td><td>褐変・斑点・枯損</td></tr>
+    <tr><td>気象害</td><td>台風・雷撃・凍害</td></tr>
+    <tr><td>物理的損傷</td><td>車両衝突・工事による傷</td></tr>
+    <tr><td>加齢・老木化</td><td>樹勢の全体的な低下</td></tr>
+  </table>
+
+  <h3>④ 治療・処置方針</h3>
+  <p>推奨する処置を複数選択できます。処置の具体的な内容（外科治療の範囲・施肥の種類など）は自由記述欄に記入してください。</p>
+
+  <h3>⑤ 緊急度・対応優先度</h3>
+  <div class="tip">
+    <strong>🚨 緊急（即日）</strong>：倒木・落枝の危険が差し迫っている場合。立入禁止措置と同時に実施。<br>
+    <strong>⚠️ 早急（1週間）</strong>：近日中に悪化する可能性がある場合。<br>
+    <strong>📅 計画的（1ヶ月）</strong>：年度内に対応が必要な場合。<br>
+    <strong>🌿 経過観察</strong>：現時点では問題なし。次回点検で再評価。
+  </div>
+
+  <h3>⑥ 次回点検・フォローアップ</h3>
+  <p>次回点検の推奨時期と、特に確認すべき重点項目を記録します。処置後の経過確認にも活用できます。</p>
+
+  <h3>💾 保存・出力</h3>
+  <p>「推論を保存」ボタンで点検データに推論情報を紐付けて保存します。<br>
+  「テキスト出力」ボタンで推論診断書をテキストファイルとしてダウンロードできます。報告書作成の下書きとして活用してください。</p>
+
+  <div class="warning">
+    ⚠️ 推論データは点検データと同じ端末のローカルストレージに保存されます。JSONバックアップに推論データも含まれますので、定期的にバックアップを行ってください。
+  </div>
+</div>
+
 <footer style="background:var(--green-dark);color:rgba(255,255,255,0.8);text-align:center;padding:20px;font-size:0.8rem;margin-top:10px;">
+```
+
   <p>樹木点検・診断システム 利用マニュアル v26.8</p>
 </footer>
 
