@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>樹木診断・点検システム（26.8）</title>
+  <title>樹木診断・点検システム（26.7）</title>
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -523,8 +523,11 @@
         <div style="font-size:0.75rem; font-weight:700; color:#1a237e; margin-bottom:8px; letter-spacing:0.04em;">📍 GPX出力（地図アプリ用）</div>
         <div style="display:flex; flex-wrap:wrap; gap:7px;">
           <button class="btn-sec" onclick="exportToGPX('all')" style="background:#e8f0fe; border-color:#3949ab; color:#1a237e;">🗂️ 全件</button>
-          <button class="btn-sec" onclick="exportToGPX('danger')" style="background:#ffebee; border-color:#c62828; color:#b71c1c;">⚠️ 判定Dのみ</button>
-          <button class="btn-sec" onclick="exportToGPX('filtered')" style="background:#e8f5e9; border-color:#2d5016; color:#2d5016;">🔍 表示中のみ</button>
+          <button class="btn-sec" onclick="exportToGPX('A')" style="background:#e8f5e9; border-color:#2e7d32; color:#1b5e20;">🟢 判定A</button>
+          <button class="btn-sec" onclick="exportToGPX('B')" style="background:#fff8e1; border-color:#f9a825; color:#e65100;">🟡 判定B</button>
+          <button class="btn-sec" onclick="exportToGPX('C')" style="background:#fff3e0; border-color:#ef6c00; color:#bf360c;">🟠 判定C</button>
+          <button class="btn-sec" onclick="exportToGPX('danger')" style="background:#ffebee; border-color:#c62828; color:#b71c1c;">🔴 判定D</button>
+          <button class="btn-sec" onclick="exportToGPX('filtered')" style="background:#f3e5f5; border-color:#7b1fa2; color:#4a148c;">🔍 表示中のみ</button>
         </div>
       </div>
 
@@ -2574,11 +2577,12 @@
     const q = (document.getElementById('searchInput').value || '').toLowerCase();
     
     if (mode === 'all') {
-      // 全件（位置情報があるもののみ）
       targets = valid.filter(r => r.latitude && r.longitude);
     } else if (mode === 'danger') {
-      // 判定Dのみ
       targets = valid.filter(r => r.overall === 'D' && r.latitude && r.longitude);
+    } else if (mode === 'A' || mode === 'B' || mode === 'C') {
+      // 判定ABC個別
+      targets = valid.filter(r => r.overall === mode && r.latitude && r.longitude);
     } else if (mode === 'filtered') {
       // 現在の検索結果から
       let filtered = valid.filter(r =>
@@ -2643,7 +2647,8 @@
   </wpt>`;
     }).filter(Boolean).join('\n');
     
-    const modeLabel = mode === 'danger' ? '危険木のみ' : mode === 'filtered' ? '検索結果' : '全件';
+    const gradeLabelMap = {A:'判定A(健全)',B:'判定B(健全に近い)',C:'判定C(要注意)',danger:'判定D(危険木)'};
+    const modeLabel = gradeLabelMap[mode] || (mode === 'filtered' ? '検索結果' : '全件');
     const gpx = `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="樹木診断・点検システム" xmlns="http://www.topografix.com/GPX/1/1">
   <metadata>
