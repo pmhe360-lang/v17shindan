@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 
 <html lang="ja">
 <head>
@@ -1755,6 +1754,7 @@
     if (editingId) {
       const idx = records.findIndex(r=>r.id===editingId);
       if (idx !== -1) { dataForLS._sentToGAS = records[idx]._sentToGAS; dataForLS._sentToGASAt = records[idx]._sentToGASAt; records[idx] = dataForLS; }
+      else { records.unshift(dataForLS); }
       editingId = null;
     } else {
       records.unshift(dataForLS);
@@ -2061,6 +2061,7 @@
     locationPhoto=r.locationPhoto||null; const pv=document.getElementById('locPhotoPreview'); if(locationPhoto){pv.src=locationPhoto;pv.style.display='block';}else pv.style.display='none';
     document.getElementById('overallComment').value=r.comment||'';
     document.getElementById('fungusOther').value=r.fungusOther||'';
+    Object.keys(scores).forEach(k=>delete scores[k]); Object.keys(healthGrades).forEach(k=>delete healthGrades[k]);
     Object.assign(scores,r.scores||{}); Object.assign(healthGrades,r.health||{});
     document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('sel'));
     declineItems.forEach(it=>{if(scores[it.id]!==undefined)document.querySelector(`[data-type="decline"][data-id="${it.id}"][data-val="${scores[it.id]}"]`)?.classList.add('sel');});
@@ -2119,7 +2120,7 @@
     dlBlob(new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:'application/octet-stream'}), `詳細_${r.treeNo}.xlsx`);
   };
 
-  window.exportToExcel = () => { const d=collectData(); if(!d.treeNo){alert('樹木Noを入力');return;} printRecord(d.id); };
+  window.exportToExcel = () => { const d=collectData(); if(!d.treeNo){alert('樹木Noを入力');return;} if(!editingId){alert('先に保存してからExcel出力してください');return;} printRecord(editingId); };
   window.exportSummaryToExcel = () => { if(!records.filter(r=>r?.id).length){alert('データなし');return;} const wb=XLSX.utils.book_new(); const rows=[['調査日','樹木No','樹種','場所','点検者','樹高','幹周','緯度','経度','判定','所見','必要な措置']]; records.filter(r=>r?.id).forEach(r=>rows.push([r.surveyDate,r.treeNo,r.species,r.location,r.inspector,r.treeHeight,r.trunkGirth,r.latitude,r.longitude,r.overall,r.comment,(r.measures||[]).join('、')])); const ws=XLSX.utils.aoa_to_sheet(rows); setColWidths(ws,[12,10,15,20,12,8,8,12,12,8,30,30]); XLSX.utils.book_append_sheet(wb,ws,'一覧表'); dlBlob(new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:'application/octet-stream'}),'樹木点検一覧.xlsx'); };
   // ===== 写真ZIP出力 =====
   let _zipMode = 'all';
@@ -3009,14 +3010,14 @@ ${wpts}
     setTimeout(checkConsent, 800);
     if(typeof applyProjectProfile === 'function') applyProjectProfile();
   }
-  init();
-
   // ==============================
   // レベル2: 案件プロファイル機能
   // ==============================
   const PROJECT_KEY = 'treeInspect_projects';
   const ALL_SCORE_IDS = ['vigor','shape','density','shoot','leafSize','leafColor','topDieback','lowerDieback','largeBranch','pruning','barkWound','barkTurnover','sprout','bud','autumnColor','flower','fruit'];
   const ALL_HEALTH_IDS = ['sway','lean','crack','fungusBody','cavity','bulge','decayExposed','barkDamage','jointAbnormality','pestDamage','rootVisible','tappingSound','penetrationAbnormality','hangingBranch'];
+
+  init();
 
   function loadProjects() {
     try { return JSON.parse(localStorage.getItem(PROJECT_KEY) || '{"projects":[],"activeId":null}'); }
